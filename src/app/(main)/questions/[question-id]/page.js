@@ -2,7 +2,7 @@
 import QuestionOptions from "@/components/mainPage/QestionsBank/QestionOptions";
 import { Box, Typography, Alert, Backdrop } from "@mui/material";
 import { useState, useEffect, useCallback, useRef } from "react";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid";
 import { BlockMath, InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import { apiClient } from "@/utils/api";
@@ -104,7 +104,7 @@ export default function EachQuestionPage({ params }) {
           setQuestionLatex("Finished");
         } else if (data.message === "correct") {
           setQuestionLatex(
-            qData.stages[stageNumber - 1]["option" + option + "_latex"] || ""
+            qData.stages[stageNumber - 1]["option" + option + "_latex"] || "",
           );
           setStageNumber((prev) => prev + 1);
           setDescription("");
@@ -116,16 +116,16 @@ export default function EachQuestionPage({ params }) {
           setOption4Title(qData.stages[stageNumber].option4_latex || "");
 
           setOption1Description(
-            qData.stages[stageNumber].option1_descrption || ""
+            qData.stages[stageNumber].option1_descrption || "",
           );
           setOption2Description(
-            qData.stages[stageNumber].option2_descrption || ""
+            qData.stages[stageNumber].option2_descrption || "",
           );
           setOption3Description(
-            qData.stages[stageNumber].option3_descrption || ""
+            qData.stages[stageNumber].option3_descrption || "",
           );
           setOption4Description(
-            qData.stages[stageNumber].option4_descrption || ""
+            qData.stages[stageNumber].option4_descrption || "",
           );
         } else {
           const descriptions = [
@@ -142,17 +142,17 @@ export default function EachQuestionPage({ params }) {
         setError("مطئنی ؟ یه بار دیگه تلاش کن");
       }
     },
-    [id, stageNumber, qData]
+    [id, stageNumber, qData],
   );
 
   return (
     <Grid
       container
-      maxWidth="lg"
       spacing={2}
       component="main"
       sx={{
         flex: 1,
+        maxWidth: "1200px",
         margin: "175px auto 25px auto",
         width: "100%",
         border: "10px solid",
@@ -203,7 +203,7 @@ export default function EachQuestionPage({ params }) {
         </Typography>
       ) : (
         <>
-          <Grid xs={12} sx={{ position: "relative" }}>
+          <Grid size={{ xs: 12 }} sx={{ position: "relative" }}>
             <Typography
               variant="normalBodyCap"
               sx={{ position: "absolute", top: 0, left: 0 }}
@@ -227,13 +227,13 @@ export default function EachQuestionPage({ params }) {
             </Typography>
           </Grid>
           {error && (
-            <Grid xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography variant="normalBody" color="error" textAlign="center">
                 {error}
               </Typography>
             </Grid>
           )}
-          <Grid xs={12}>
+          <Grid size={{ xs: 12 }}>
             {simpleArray.map((_, index) => (
               <QuestionOptions
                 key={index + 1}

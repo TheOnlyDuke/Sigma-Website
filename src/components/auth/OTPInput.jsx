@@ -69,9 +69,11 @@ const OTPInput = ({ length = 6, onChange }) => {
           onKeyDown={(e) => handleKeyDown(e, index)}
           onPaste={handlePaste}
           type="text"
-          inputProps={{
-            maxLength: 1,
-            style: { textAlign: "center", height: "37px" },
+          slotProps={{
+            input: {
+              maxLength: 1,
+              style: { textAlign: "center", height: "37px" },
+            },
           }}
           sx={{ width: "3.75rem", height: "70px" }}
         />

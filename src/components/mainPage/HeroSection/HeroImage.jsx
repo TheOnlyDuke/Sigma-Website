@@ -7,8 +7,9 @@ export default function HeroImage() {
     <Box sx={heroStyles.imageContainer}>
       <Image
         src="/images/herosection.png"
-        fill={true}
-        alt="ارشمیدش، پدر علم ریاضی"
+        fill
+        sizes="(max-width: 600px) 100vw, 550px"
+        alt="ارشمیدس، پدر علم ریاضی"
         priority
       />
     </Box>

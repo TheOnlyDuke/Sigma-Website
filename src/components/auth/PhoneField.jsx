@@ -1,14 +1,14 @@
-import React from 'react';
-import { TextField } from '@mui/material';
+import React from "react";
+import { TextField } from "@mui/material";
 
 export default function PhoneField({ value, onChange, ...props }) {
   const handleChange = (event) => {
-    const newValue = event.target.value.replace(/[^0-9]/g, '');
+    const newValue = event.target.value.replace(/[^0-9]/g, "");
     onChange({
       target: {
         name: event.target.name,
-        value: newValue
-      }
+        value: newValue,
+      },
     });
   };
 
@@ -24,9 +24,11 @@ export default function PhoneField({ value, onChange, ...props }) {
       autoComplete="tel"
       value={value}
       onChange={handleChange}
-      inputProps={{
-        inputMode: 'numeric',
-        pattern: '[0-9]*'
+      slotProps={{
+        input: {
+          inputMode: "numeric",
+          pattern: "[0-9]*",
+        },
       }}
       {...props}
     />

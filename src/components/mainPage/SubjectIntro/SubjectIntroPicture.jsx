@@ -27,7 +27,7 @@ export default function SubjectIntroPicture({ src, alt, pos }) {
         transition: "opacity 0.3s ease-in-out",
       }}
     >
-      <Image src={src} layout="fill" alt={alt} />
+      <Image src={src} fill alt={alt} sizes="(max-width: 600px) 100vw, 550px" />
     </Box>
   );
 }

@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import CategoryPaper from "./HeaderCategoryPaper";
 import { subjects, blogs } from "@/utils/dummydatas";
-import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import HeaderBlogsPaper from "./HeaderBlogsPaper";
 
@@ -55,8 +55,8 @@ export default function HeaderMenu({ handleMouseLeave, openMenu }) {
                       each.difficulty === 1
                         ? "مبتدی"
                         : each.difficulty === 2
-                        ? "متوسط"
-                        : "دشوار"
+                          ? "متوسط"
+                          : "دشوار"
                     }
                     numOfEpisodes={each.numOfEp}
                     icon={each.icon}

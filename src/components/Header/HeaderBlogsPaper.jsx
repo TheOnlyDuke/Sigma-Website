@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import Grid from "@mui/material/Grid";
 import { Fragment } from "react";
 import HeaderBlogsItem from "./HeaderBlogsGridItem";
 
@@ -9,18 +9,20 @@ export default function HeaderBlogsPaper({ items, onClick }) {
   }
 
   return (
-    <Grid container spacing={2} width="100%" height="300px">
+    <Grid container spacing={2} sx={{ width: "100%", height: "300px" }}>
       {groupedItems.map((group, groupIndex) => (
         <Fragment key={groupIndex}>
-          <Grid xs={12} md={3} height="100%">
+          <Grid size={{ xs: 12, md: 3 }} sx={{ height: "100%" }}>
             {group.slice(0, 2).map((item) => (
               <Grid
-                xs={12}
+                size={{ xs: 12 }}
                 key={item.id}
-                height="50%"
-                p={0}
-                paddingBottom={item.id % 3 === 1 ? "7.5px" : 0}
-                paddingTop={item.id % 3 === 2 ? "7.5px" : 0}
+                sx={{
+                  height: "50%",
+                  p: 0,
+                  paddingBottom: item.id % 3 === 1 ? "7.5px" : 0,
+                  paddingTop: item.id % 3 === 2 ? "7.5px" : 0,
+                }}
               >
                 <HeaderBlogsItem
                   icon={item.icon}
@@ -32,7 +34,7 @@ export default function HeaderBlogsPaper({ items, onClick }) {
             ))}
           </Grid>
           {group[2] && (
-            <Grid xs={12} md={3} height="100%">
+            <Grid size={{ xs: 12, md: 3 }} sx={{ height: "100%" }}>
               <HeaderBlogsItem
                 icon={group[2].icon}
                 title={group[2].title}

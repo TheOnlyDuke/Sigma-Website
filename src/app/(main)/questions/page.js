@@ -2,7 +2,7 @@
 import QuestionPreview from "@/components/mainPage/QestionsBank/QuestionPreview";
 import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid";
 import { fetchQuestions } from "@/app/api/questions";
 
 export default function QuestionsPage() {
@@ -30,21 +30,21 @@ export default function QuestionsPage() {
   return (
     <Grid
       container
-      maxWidth="lg"
       spacing={3}
       component="main"
       sx={{
         flex: 1,
+        maxWidth: "1200px",
         margin: "175px auto 25px auto",
         width: "100%",
       }}
     >
       <Grid
+        size={{ xs: 12 }}
         sx={{
           "*": { display: "flex", justifyContent: "center" },
           marginBottom: "50px",
         }}
-        xs={12}
       >
         <Typography variant="title">به بانک سوالات سیگما خوش اومدی</Typography>
         <Typography variant="normalBodyCap">
@@ -59,7 +59,7 @@ export default function QuestionsPage() {
         </Typography>
       ) : (
         qData.map((question, index) => (
-          <Grid xs={12}>
+          <Grid size={{ xs: 12 }} key={question.id ?? index}>
             <QuestionPreview
               QB={true}
               title={question.title}

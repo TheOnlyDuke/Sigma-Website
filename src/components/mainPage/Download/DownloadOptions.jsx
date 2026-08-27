@@ -2,7 +2,7 @@ import GooglePLay from "../../../../public/images/Download/GooglePlay.png";
 import AppStore from "../../../../public/images/Download/AppStore.png";
 import DirectDownload from "../../../../public/images/Download/DirectDownload.png";
 import Image from "next/image";
-import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import Grid from "@mui/material/Grid";
 
 export default function DownloadOptions() {
   return (

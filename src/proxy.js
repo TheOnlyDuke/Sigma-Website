@@ -2,10 +2,9 @@ import { NextResponse } from "next/server";
 
 export const config = {
   matcher: "/dashboard/:path*",
-  runtime: "experimental-edge", // Changed from 'edge' to 'experimental-edge'
 };
 
-export function middleware(request) {
+export function proxy(request) {
   const accessToken = request.cookies.get("access_token");
 
   if (

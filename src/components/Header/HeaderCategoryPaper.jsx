@@ -1,6 +1,6 @@
 import { Typography, SvgIcon } from "@mui/material";
 import Image from "next/image";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import Grid from "@mui/material/Grid";
 import { ArrowLeft } from "@/utils/icons";
 import DotDivider from "../DotDivider";
 
@@ -11,7 +11,7 @@ export default function CategoryPaper({
   icon,
 }) {
   return (
-    <Grid2
+    <Grid
       sx={{
         p: "30px",
         border: "1px solid",
@@ -45,8 +45,8 @@ export default function CategoryPaper({
         },
       }}
     >
-      <Grid2 container alignItems="center" spacing={2}>
-        <Grid2
+      <Grid container alignItems="center" spacing={2}>
+        <Grid
           xs={2}
           sx={{
             display: "flex",
@@ -58,7 +58,7 @@ export default function CategoryPaper({
             "& .MuiSvgIcon-root": {
               display: "none",
             },
-            [`${Grid2}:hover &`]: {
+            [`${Grid}:hover &`]: {
               "& img": {
                 opacity: 0,
                 position: "absolute",
@@ -71,8 +71,8 @@ export default function CategoryPaper({
         >
           <Image src={icon} width={30} height={30} alt={title} />
           <ArrowLeft />
-        </Grid2>
-        <Grid2
+        </Grid>
+        <Grid
           xs={10}
           sx={{
             display: "flex",
@@ -88,8 +88,8 @@ export default function CategoryPaper({
           >
             {difficulty} <DotDivider /> {numOfEpisodes} مبحث آموزشی
           </Typography>
-        </Grid2>
-      </Grid2>
-    </Grid2>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }

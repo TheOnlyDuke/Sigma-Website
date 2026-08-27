@@ -1,10 +1,10 @@
 import { Container, Typography } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid";
 import VideoPlayer from "@/components/VideoPlayer";
 import { descriptions } from "@/utils/dummydatas";
 
-export default function LearningPage({ params }) {
-  const id = params["learn-sec"];
+export default async function LearningPage({ params }) {
+  const { "learn-sec": id } = await params;
   const decodedId = decodeURIComponent(id);
   const description = descriptions[[decodedId || "موضوع یافت نشد"]];
 

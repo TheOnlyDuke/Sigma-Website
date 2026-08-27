@@ -1,4 +1,4 @@
-import { Container, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   DownloadSection,
   SubjectIntro,
@@ -22,7 +22,6 @@ export default function Home() {
       backgroundImage: "url(/svg/herosection.svg)",
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
-      filter: "url('#blur')",
       filter: {
         xs: "blur(7.5vw)",
         md: "blur(5vw)",
@@ -42,7 +41,7 @@ export default function Home() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: { sx: "100px", sm: "150px" },
+          gap: { xs: "100px", sm: "150px" },
           marginBottom: "150px",
         }}
       >
