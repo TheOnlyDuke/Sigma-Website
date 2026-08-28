@@ -7,9 +7,12 @@ export default function ResponsiveContainer({
   disableGutters = false,
   ...props
 }) {
+  const isNumeric = typeof maxWidth === "number";
+  const containerMaxWidth = isNumeric ? false : maxWidth;
+
   return (
     <Container
-      maxWidth={maxWidth}
+      maxWidth={containerMaxWidth}
       disableGutters={disableGutters}
       sx={{
         px: {
@@ -17,7 +20,9 @@ export default function ResponsiveContainer({
           sm: "48px",
           md: "64px",
           lg: "128px",
-          lgp: "0px",
+          lgp: "128px",
+          xl: "128px",
+          xlp: "128px",
         },
         mx: "auto",
         position: "relative",
@@ -25,6 +30,7 @@ export default function ResponsiveContainer({
         height: "100%",
         display: "flex",
         flexDirection: "column",
+        ...(isNumeric ? { maxWidth: `${maxWidth}px` } : null),
         ...sx,
       }}
       {...props}

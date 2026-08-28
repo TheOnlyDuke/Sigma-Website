@@ -1,4 +1,4 @@
-import { Grid, Typography, Paper, SvgIcon } from "@mui/material";
+import { Box, Typography, Paper, SvgIcon } from "@mui/material";
 import Link from "next/link";
 
 export default function HeaderBlogsItem({ title, description, icon, onClick }) {
@@ -35,9 +35,15 @@ export default function HeaderBlogsItem({ title, description, icon, onClick }) {
           },
         }}
       >
-        <Grid container alignItems="center" spacing={2}>
-          <Grid
-            xs={2}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Box
             sx={{
               width: "fit-content",
               display: "flex",
@@ -47,9 +53,8 @@ export default function HeaderBlogsItem({ title, description, icon, onClick }) {
             <SvgIcon sx={{ width: "24px", height: "24px", fill: "none" }}>
               {icon}
             </SvgIcon>
-          </Grid>
-          <Grid
-            xs={10}
+          </Box>
+          <Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -59,8 +64,8 @@ export default function HeaderBlogsItem({ title, description, icon, onClick }) {
           >
             <Typography variant="normalBody">{title}</Typography>
             <Typography variant="smallBodyCap">{description}</Typography>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Paper>
     </Link>
   );

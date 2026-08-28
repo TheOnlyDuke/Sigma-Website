@@ -281,61 +281,70 @@ export const privacy = [
 ];
 
 export const staffData = {
-  devs: {
-    front: {
+  devs: [
+    {
+      id: "front",
       name: "مهدی عباسی",
       avatar: "./images/staff/front.jpg",
-      role: "‌فرانت‌اند",
-      education: "کارشناسی علوم کامپیوتر",
+      role: "فرانت‌اند",
+      education: "ارشد نظریه سیستم",
       framework: "Next.js",
       github: "https://github.com/TheOnlyDuke",
       email: "DukeMahdinal@gmail.com",
     },
-    back: {
+    {
+      id: "back",
       name: "محمد مهدی جهانتیغی",
       avatar: "./images/staff/back.jpg",
       role: "بک‌اند",
-      education: "کارشناسی علوم کامپیوتر",
+      education: "ارشد علوم و تصمیم دانش",
       framework: "Django",
       github: "https://github.com/mohammad2831",
       email: "mhmd.2831.mahdi@gmail.com",
     },
-    android: {
+    /*
+    {
+      id: "android",
       name: "یاسین قابوسی",
       avatar: "./images/staff/android.jpg",
-      role: "اپلیکشن اندروید",
+      role: "اپلیکیشن اندروید",
       education: "کارشناسی علوم کامپیوتر",
       framework: "Flutter",
       github: "",
       email: "",
     },
-    design: {
-      name: "ایلیا بازیار ",
+    {
+      id: "design",
+      name: "ایلیا بازیار",
       avatar: "./images/staff/design.jpg",
-      role: " ui و ux",
+      role: "UI و UX",
       education: "کارشناسی علوم کامپیوتر",
       framework: "Figma Designer",
       github: "https://github.com/iliaprm",
       telegram: "@Iliya_prm",
       email: "iliabaziyar006@gmail.com",
     },
-  },
+    */
+  ],
   question: [
     {
+      id: "q1",
       name: "حسن ذکرآبادی",
       avatar: "./images/staff/q1.jpg",
-      role: "‌تمامی بخش ها",
+      role: "تمامی بخش‌ها",
       education: "کارشناسی ریاضیات و کاربردها",
       email: "hassan.zekrabad@gmail.com",
     },
     {
+      id: "q2",
       name: "صادق ملایجردی",
       avatar: "./images/staff/q2.jpg",
-      role: "‌مشتق مراتب بالاتر و انتگرال های مثلثاتی",
+      role: "مشتق مراتب بالاتر و انتگرال‌های مثلثاتی",
       education: "کارشناسی ریاضیات و کاربردها",
       email: "ss.malaijerdy@gmail.com",
     },
     {
+      id: "q3",
       name: "بهاره محمدیان",
       avatar: "./images/staff/q3.jpg",
       role: "مشتق زنجیره‌ای و انتگرال تغییر مثلثاتی",

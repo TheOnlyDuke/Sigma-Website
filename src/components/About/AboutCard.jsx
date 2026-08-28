@@ -1,128 +1,132 @@
-import { Avatar, Typography, Box } from "@mui/material";
+import {
+  Avatar,
+  Typography,
+  Box,
+  Stack,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import TelegramIcon from "@mui/icons-material/Telegram";
 
-export default function AboutCard({ data, bit }) {
-  const topic = bit
-    ? ["توسعه دهنده", "تحصیلات", "فریم‌ورک"]
-    : ["طراح سوالات", "تحصیلات", "تعداد سوالات"];
+const TEAM_FIELDS = {
+  devs: [
+    { key: "role", label: "نقش" },
+    { key: "education", label: "تحصیلات" },
+    { key: "framework", label: "فریم‌ورک" },
+  ],
+  question: [
+    { key: "role", label: "تخصص" },
+    { key: "education", label: "تحصیلات" },
+  ],
+};
+
+const SocialButton = ({ href, label, children }) => {
+  if (!href) return null;
+  return (
+    <Tooltip title={label} arrow placement="top">
+      <IconButton
+        component="a"
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={label}
+        size="small"
+        sx={{
+          color: "primary.main",
+          transition: "all 0.2s ease",
+          "&:hover": {
+            color: "primary.main",
+            transform: "translateY(-2px)",
+            backgroundColor: "action.hover",
+          },
+        }}
+      >
+        {children}
+      </IconButton>
+    </Tooltip>
+  );
+};
+
+export default function AboutCard({ data, teamType = "devs" }) {
+  const fields = TEAM_FIELDS[teamType] ?? TEAM_FIELDS.devs;
+  const hasSocials = data.github || data.email || data.telegram;
+
   return (
     <Box
       sx={{
-        backgroundColor: "transparent",
-        boxShadow: "none",
-        border: "solid 2px var(--border)",
+        backgroundColor: "background.paper",
+        border: "1px solid var(--border)",
         borderRadius: "var(--border-radius)",
-        padding: "50px",
+        padding: { xs: "20px", sm: "30px", lg: "40px" },
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        position: "relative",
+        textAlign: "center",
+        height: "100%",
+        transition:
+          "transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: "0 12px 30px rgba(70, 43, 239, 0.12)",
+          borderColor: "primary.main",
+        },
       }}
     >
       <Avatar
         sx={{
-          width: {
-            xs: 100,
-            lg: 200,
-          },
-          height: {
-            xs: 100,
-            lg: 200,
-          },
+          width: { xs: 96, sm: 120, lg: 150 },
+          height: { xs: 96, sm: 120, lg: 150 },
+          border: "3px solid var(--border)",
         }}
-        alt={data.name + " picture "}
+        alt={`${data.name} avatar`}
         src={data.avatar}
       />
-      <Typography variant="normalBody" sx={{ marginTop: "15px" }}>
+
+      <Typography
+        variant="smallTitle"
+        sx={{ mt: 2, fontSize: { xs: "18px", lg: "20px" } }}
+      >
         {data.name}
       </Typography>
-      <Box id="aboutCardDetails" sx={{ width: "100%", my: "15px" }}>
-        <Typography variant="smallBody" sx={{ color: "text.secondary" }}>
-          {topic[0]} : {data.role}
-        </Typography>
-        <Typography variant="smallBody" sx={{ color: "text.secondary" }}>
-          {topic[1]} : {data.education}
-        </Typography>
-        <Typography variant="smallBody" sx={{ color: "text.secondary" }}>
-          {topic[2]} : {data.framework}
-        </Typography>
-      </Box>
 
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: "15px",
-          left: "15px",
-        }}
-      >
-        {bit && (
-          <a rel="noopener noreferrer" href={data.github}>
-            <svg
-              width="23"
-              height="23"
-              viewBox="0 0 23 23"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+      <Stack spacing={0.5} sx={{ width: "100%", my: 2, alignItems: "stretch" }}>
+        {fields.map(({ key, label }) =>
+          data[key] ? (
+            <Typography
+              key={key}
+              variant="smallBody"
+              sx={{ color: "text.secondary" }}
             >
-              <g clip-path="url(#clip0_116_1439)">
-                <path
-                  d="M18.369 6.89556C18.5744 6.23307 18.6403 5.53523 18.5625 4.84602C18.4847 4.15681 18.265 3.49119 17.9172 2.89113C17.8582 2.78897 17.7734 2.70414 17.6712 2.64516C17.569 2.58619 17.4531 2.55516 17.3352 2.55519C16.5526 2.55355 15.7805 2.73497 15.0805 3.08495C14.3805 3.43494 13.7721 3.94379 13.3039 4.57084H11.2882C10.82 3.94379 10.2116 3.43494 9.5116 3.08495C8.81163 2.73497 8.03951 2.55355 7.25692 2.55519C7.13895 2.55516 7.02306 2.58619 6.92089 2.64516C6.81872 2.70414 6.73388 2.78897 6.6749 2.89113C6.32707 3.49119 6.10735 4.15681 6.02958 4.84602C5.95181 5.53523 6.01769 6.23307 6.22306 6.89556C5.80794 7.62011 5.58558 8.43902 5.57721 9.27402V9.94591C5.57862 11.0827 5.99132 12.1807 6.73908 13.037C7.48685 13.8932 8.51919 14.4501 9.64547 14.6046C9.18574 15.1929 8.9362 15.9181 8.93663 16.6647V17.3366H6.92098C6.38639 17.3366 5.8737 17.1243 5.4957 16.7463C5.11769 16.3683 4.90533 15.8556 4.90533 15.321C4.90533 14.8798 4.81843 14.443 4.64961 14.0354C4.48078 13.6278 4.23333 13.2575 3.92137 12.9455C3.60942 12.6336 3.23908 12.3861 2.8315 12.2173C2.42392 12.0485 1.98707 11.9616 1.54591 11.9616C1.36771 11.9616 1.19682 12.0323 1.07081 12.1583C0.944811 12.2844 0.874023 12.4552 0.874023 12.6334C0.874023 12.8116 0.944811 12.9825 1.07081 13.1085C1.19682 13.2345 1.36771 13.3053 1.54591 13.3053C2.08049 13.3053 2.59318 13.5177 2.97119 13.8957C3.3492 14.2737 3.56156 14.7864 3.56156 15.321C3.56156 16.212 3.9155 17.0664 4.54551 17.6964C5.17552 18.3265 6.03 18.6804 6.92098 18.6804H8.93663V20.0242C8.93663 20.2024 9.00742 20.3733 9.13342 20.4993C9.25942 20.6253 9.43032 20.696 9.60851 20.696C9.78671 20.696 9.9576 20.6253 10.0836 20.4993C10.2096 20.3733 10.2804 20.2024 10.2804 20.0242V16.6647C10.2804 16.1302 10.4928 15.6175 10.8708 15.2395C11.2488 14.8615 11.7615 14.6491 12.296 14.6491C12.8306 14.6491 13.3433 14.8615 13.7213 15.2395C14.0993 15.6175 14.3117 16.1302 14.3117 16.6647V20.0242C14.3117 20.2024 14.3825 20.3733 14.5085 20.4993C14.6345 20.6253 14.8054 20.696 14.9836 20.696C15.1618 20.696 15.3327 20.6253 15.4587 20.4993C15.5847 20.3733 15.6555 20.2024 15.6555 20.0242V16.6647C15.6559 15.9181 15.4064 15.1929 14.9466 14.6046C16.0729 14.4501 17.1052 13.8932 17.853 13.037C18.6008 12.1807 19.0135 11.0827 19.0149 9.94591V9.27402C19.0065 8.43902 18.7842 7.62011 18.369 6.89556ZM17.6711 9.94591C17.6711 10.8369 17.3172 11.6914 16.6872 12.3214C16.0572 12.9514 15.2027 13.3053 14.3117 13.3053H10.2804C9.38942 13.3053 8.53494 12.9514 7.90493 12.3214C7.27491 11.6914 6.92098 10.8369 6.92098 9.94591V9.27402C6.92921 8.60216 7.13036 7.94682 7.50048 7.38603C7.56947 7.29509 7.61416 7.18807 7.63032 7.07507C7.64649 6.96207 7.63359 6.84682 7.59286 6.74018C7.41785 6.28884 7.33363 5.8074 7.34501 5.32346C7.3564 4.83951 7.46317 4.36256 7.65921 3.91995C8.20907 3.9791 8.73858 4.16125 9.20847 4.4529C9.67835 4.74454 10.0766 5.1382 10.3736 5.6047C10.4341 5.69935 10.5175 5.77732 10.6159 5.83146C10.7144 5.8856 10.8248 5.91419 10.9372 5.91461H13.6541C13.7669 5.91461 13.8778 5.88622 13.9768 5.83206C14.0757 5.7779 14.1594 5.69971 14.2202 5.6047C14.5171 5.13816 14.9154 4.74447 15.3853 4.45282C15.8552 4.16117 16.3847 3.97904 16.9346 3.91995C17.1303 4.36267 17.2368 4.83967 17.2479 5.32362C17.259 5.80757 17.1745 6.28895 16.9992 6.74018C16.9586 6.8458 16.945 6.95988 16.9597 7.07208C16.9744 7.18428 17.0168 7.29104 17.0832 7.38267C17.457 7.94346 17.6611 8.60015 17.6711 9.27402V9.94591Z"
-                  fill="#462BEF"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_116_1439">
-                  <rect
-                    width="21.5003"
-                    height="21.5003"
-                    fill="white"
-                    transform="translate(0.874023 0.539551)"
-                  />
-                </clipPath>
-              </defs>
-            </svg>
-          </a>
+              <Box
+                component="span"
+                sx={{ color: "text.primary", fontWeight: 600 }}
+              >
+                {label}:
+              </Box>{" "}
+              {data[key]}
+            </Typography>
+          ) : null,
         )}
-        {/* <a rel="noopener noreferrer" href={data.telegram}>
-          <svg
-            width="22"
-            height="23"
-            viewBox="0 0 22 23"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+      </Stack>
+
+      {hasSocials && (
+        <Stack direction="row" spacing={1} sx={{ mt: "auto", pt: 1 }}>
+          <SocialButton href={data.github} label="گیت‌هاب">
+            <GitHubIcon fontSize="small" />
+          </SocialButton>
+          <SocialButton href={data.telegram} label="تلگرام">
+            <TelegramIcon fontSize="small" />
+          </SocialButton>
+          <SocialButton
+            href={data.email ? `mailto:${data.email}` : ""}
+            label="ایمیل"
           >
-            <g clip-path="url(#clip0_116_1441)">
-              <path
-                d="M19.2983 2.73919C19.1942 2.6493 19.0676 2.58952 18.932 2.56628C18.7964 2.54305 18.6571 2.55724 18.529 2.60734L1.50852 9.26822C1.2673 9.36202 1.06308 9.53164 0.926604 9.75155C0.790128 9.97146 0.728784 10.2297 0.751806 10.4875C0.774828 10.7453 0.88097 10.9887 1.05425 11.1809C1.22754 11.3731 1.45858 11.5039 1.7126 11.5535L6.12268 12.4194V17.3367C6.12181 17.6045 6.20141 17.8665 6.35115 18.0886C6.5009 18.3106 6.7139 18.4826 6.96253 18.5822C7.21079 18.6836 7.4838 18.7079 7.74607 18.652C8.00834 18.5962 8.24773 18.4627 8.43312 18.2689L10.5596 16.0635L13.9333 19.0164C14.1767 19.2323 14.4907 19.3518 14.816 19.3524C14.9586 19.3522 15.1003 19.3299 15.2359 19.286C15.4576 19.2157 15.657 19.0885 15.8142 18.9171C15.9715 18.7457 16.081 18.5362 16.1321 18.3093L19.541 3.47911C19.5715 3.34536 19.565 3.20583 19.5223 3.07549C19.4795 2.94514 19.4021 2.82889 19.2983 2.73919ZM14.1634 5.76267L6.63919 11.1512L2.47351 10.334L14.1634 5.76267ZM7.46645 17.3367V13.3491L9.54845 15.1749L7.46645 17.3367ZM14.8177 18.0086L7.87378 11.9196L17.868 4.75652L14.8177 18.0086Z"
-                fill="#462BEF"
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_116_1441">
-                <rect
-                  width="21.5003"
-                  height="21.5003"
-                  fill="white"
-                  transform="translate(0.0756836 0.539551)"
-                />
-              </clipPath>
-            </defs>
-          </svg>
-        </a> */}
-        <a rel="noopener noreferrer" href={data.email}>
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M18.8125 4.03125H2.6875C2.50931 4.03125 2.33841 4.10204 2.21241 4.22804C2.08641 4.35404 2.01563 4.52493 2.01562 4.70312V16.125C2.01563 16.4814 2.1572 16.8232 2.4092 17.0752C2.6612 17.3272 3.00299 17.4688 3.35938 17.4688H18.1406C18.497 17.4688 18.8388 17.3272 19.0908 17.0752C19.3428 16.8232 19.4844 16.4814 19.4844 16.125V4.70312C19.4844 4.52493 19.4136 4.35404 19.2876 4.22804C19.1616 4.10204 18.9907 4.03125 18.8125 4.03125ZM17.0849 5.375L10.75 11.1825L4.41506 5.375H17.0849ZM18.1406 16.125H3.35938V6.2308L10.2956 12.5893C10.4196 12.703 10.5817 12.7662 10.75 12.7662C10.9183 12.7662 11.0804 12.703 11.2044 12.5893L18.1406 6.2308V16.125Z"
-              fill="#462BEF"
-            />
-          </svg>
-        </a>
-      </Box>
+            <EmailOutlinedIcon fontSize="small" />
+          </SocialButton>
+        </Stack>
+      )}
     </Box>
   );
 }
