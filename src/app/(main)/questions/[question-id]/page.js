@@ -116,16 +116,16 @@ export default function EachQuestionPage({ params }) {
           setOption4Title(qData.stages[stageNumber].option4_latex || "");
 
           setOption1Description(
-            qData.stages[stageNumber].option1_descrption || "",
+            qData.stages[stageNumber].option1_description || "",
           );
           setOption2Description(
-            qData.stages[stageNumber].option2_descrption || "",
+            qData.stages[stageNumber].option2_description || "",
           );
           setOption3Description(
-            qData.stages[stageNumber].option3_descrption || "",
+            qData.stages[stageNumber].option3_description || "",
           );
           setOption4Description(
-            qData.stages[stageNumber].option4_descrption || "",
+            qData.stages[stageNumber].option4_description || "",
           );
         } else {
           const descriptions = [

@@ -19,7 +19,7 @@ export default function DownloadSection({}) {
         direction: "rtl",
       }}
     >
-      <Box sx={{ width: { sx: "350px", sm: "100%" }, p: "25px" }} maxWidth="lg">
+      <Box sx={{ width: { sx: "350px", sm: "100%" }, p: "25px" }}>
         <Typography variant="title" sx={{ color: "var(--activeText)" }}>
           با اپلیکیشن سیگما،
           <span style={{ display: "block", color: "inherit" }}>

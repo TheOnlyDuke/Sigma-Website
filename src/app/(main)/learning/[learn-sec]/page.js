@@ -6,11 +6,10 @@ import { descriptions } from "@/utils/dummydatas";
 export default async function LearningPage({ params }) {
   const { "learn-sec": id } = await params;
   const decodedId = decodeURIComponent(id);
-  const description = descriptions[[decodedId || "موضوع یافت نشد"]];
+  const description = descriptions[decodedId || "موضوع یافت نشد"];
 
   return (
     <Container
-      maxWidth="lg"
       component="main"
       disableGutters
       style={{
@@ -18,7 +17,7 @@ export default async function LearningPage({ params }) {
         flex: "1",
         display: "flex",
         justifyContent: "center",
-        alignitems: "center",
+        alignItems: "center",
         marginBottom: "200px",
       }}
     >

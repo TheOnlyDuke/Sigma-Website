@@ -34,12 +34,12 @@ export default function HeaderMenu({ handleMouseLeave, openMenu }) {
       >
         <Grid
           container
-          maxWidth="lg"
           spacing={2}
           sx={{
             width: "100%",
             margin: "auto",
             direction: "rtl",
+            maxWidth: "lg",
           }}
         >
           {openMenu === "subjects" ? (

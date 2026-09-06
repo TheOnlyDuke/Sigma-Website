@@ -45,7 +45,7 @@ export default function CategoryPaper({
         },
       }}
     >
-      <Grid container alignItems="center" spacing={2}>
+      <Grid container sx={{ alignItems: "center" }} spacing={2}>
         <Grid
           xs={2}
           sx={{
