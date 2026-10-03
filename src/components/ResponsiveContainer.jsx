@@ -15,15 +15,19 @@ export default function ResponsiveContainer({
       maxWidth={containerMaxWidth}
       disableGutters={disableGutters}
       sx={{
-        px: {
-          xs: "32px",
-          sm: "48px",
-          md: "64px",
-          lg: "128px",
-          lgp: "128px",
-          xl: "128px",
-          xlp: "128px",
-        },
+        ...(disableGutters
+          ? {}
+          : {
+              px: {
+                xs: "32px",
+                sm: "48px",
+                md: "64px",
+                lg: "128px",
+                lgp: "128px",
+                xl: "128px",
+                xlp: "128px",
+              },
+            }),
         mx: "auto",
         position: "relative",
         width: "100%",

@@ -8,16 +8,19 @@ export default function DownloadOptions() {
   return (
     <Grid
       container
-      spacing={0.5}
+      spacing={1.5}
       sx={{
-        width: "320px",
+        width: "100%",
+        maxWidth: "340px",
         marginTop: "20px",
         "& img": {
           cursor: "pointer",
+          width: "100%",
+          height: "auto",
         },
       }}
     >
-      <Grid xs={6}>
+      <Grid item xs={6}>
         <a href="https://google.com" target="_blank" rel="noopener noreferrer">
           <Image
             src={GooglePLay}
@@ -27,7 +30,7 @@ export default function DownloadOptions() {
           />
         </a>
       </Grid>
-      <Grid xs={6}>
+      <Grid item xs={6}>
         <a href="https://google.com" target="_blank" rel="noopener noreferrer">
           <Image
             src={AppStore}
@@ -37,8 +40,13 @@ export default function DownloadOptions() {
           />
         </a>
       </Grid>
-      <Grid xs={6}>
-        <a href="https://google.com" target="_blank" rel="noopener noreferrer">
+      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+        <a
+          href="https://google.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ width: "100%", maxWidth: "160px", display: "inline-block" }}
+        >
           <Image
             src={DirectDownload}
             width={150}
