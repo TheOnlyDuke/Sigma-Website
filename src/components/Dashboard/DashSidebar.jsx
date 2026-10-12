@@ -1,183 +1,117 @@
 "use client";
-import {
-  Drawer,
-  Box,
-  Avatar,
-  Typography,
-  Button,
-  Divider,
-} from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useState } from "react";
+import { Box, Divider, IconButton, Collapse } from "@mui/material";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { mockUserData } from "@/utils/dummydatas";
+import DashUserProfile from "./DashUserProfile";
+import DashNavActions from "./DashNavActions";
 
-export default function DashSidebar() {
+const ChevronSvg = ({ open }) => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    style={{
+      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+      transition: "transform 0.25s ease",
+    }}
+  >
+    <path
+      d="M5 7.5L10 12.5L15 7.5"
+      stroke="#969696"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export default function DashSidebar({ tabNavigation }) {
   const { USER_INFO, clearAuth } = useAuth();
   const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = async () => {
     await clearAuth();
     router.push("/auth/login");
   };
-  console.log(USER_INFO);
+
   if (!USER_INFO) return null;
 
-  const navButtStyle = {
-    width: "100%",
-    bgcolor: "transparent",
-    color: "text.primary",
-    justifyContent: "flex-start",
-    flexDirection: "row-reverse",
-    "& .MuiButton-startIcon": {
-      marginLeft: "8px",
-      marginRight: 0,
-    },
-    "&:hover": {
-      color: "var(--activeText)",
-    },
-  };
+  const fullName = USER_INFO?.user?.full_name || mockUserData.user.full_name;
+  const university = USER_INFO?.user?.university || mockUserData.user.university;
+
   return (
-    <Box
-      sx={{
-        width: 320,
-        border: "2px solid var(--border)",
-        margin: "20px",
-        borderRadius: "var(--border-radius)",
-      }}
-    >
+    <>
+      {/* Desktop sidebar */}
       <Box
         sx={{
-          p: 3,
-          display: "flex",
+          display: { xs: "none", md: "flex" },
+          width: 293,
+          minWidth: 293,
+          height: { md: 800, lg: 820 },
+          border: "2px solid var(--border)",
+          borderRadius: "20px",
+          bgcolor: "background.paper",
           flexDirection: "column",
-          alignItems: "center",
-          gap: 2,
+          justifyContent: "space-between",
+          p: "30px 24px",
+          boxSizing: "border-box",
         }}
       >
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <Typography variant="smallBody" fontWeight="bold">
-              {USER_INFO.user.full_name}
-            </Typography>
-            <Typography variant="smallBody" color="text.secondary">
-              {USER_INFO.user.phone_number}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "75px",
-              aspectRatio: "1/1",
-              borderRadius: "var(--border-radius)",
-              border: "1px solid rgba(0, 0, 0, 0.12)",
-            }}
-          >
-            <Avatar
-              sx={{
-                width: 50,
-                height: 50,
-                bgcolor: "primary.main",
-                fontSize: "2rem",
-              }}
-            >
-              {USER_INFO.user.full_name?.[0]}
-            </Avatar>
-          </Box>
+        <Box sx={{ width: "100%" }}>
+          <DashUserProfile fullName={fullName} university={university} />
+          <Divider sx={{ width: "100%", my: "24px", borderColor: "var(--border)" }} />
+          {tabNavigation}
         </Box>
-        <Divider sx={{ width: "100%", my: 2 }} />
+
+        <DashNavActions onLogout={handleLogout} />
+      </Box>
+
+      {/* Mobile collapsible mini-profile card */}
+      <Box
+        sx={{
+          display: { xs: "flex", md: "none" },
+          flexDirection: "column",
+          width: "100%",
+          border: "1px solid var(--border)",
+          borderRadius: "20px",
+          bgcolor: "background.paper",
+          p: 2,
+          boxSizing: "border-box",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
+            alignItems: "center",
             justifyContent: "space-between",
-            flexDirection: "column",
             width: "100%",
-            minHeight: "100%",
+            cursor: "pointer",
           }}
+          onClick={() => setMobileOpen(!mobileOpen)}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 1,
-            }}
+          <IconButton
+            size="small"
+            sx={{ color: "#969696", p: 1 }}
+            aria-label="منوی کاربری"
           >
-            <Button
-              variant="contained"
-              fullWidth
-              sx={navButtStyle}
-              startIcon={<AccountCircleIcon />}
-            >
-              آمار من
-            </Button>
-            <Button
-              variant="contained"
-              fullWidth
-              sx={navButtStyle}
-              startIcon={<MenuBookIcon />}
-            >
-              مباحث
-            </Button>
-            <Button
-              variant="contained"
-              fullWidth
-              sx={navButtStyle}
-              startIcon={<NotificationsIcon />}
-            >
-              اطلاع رسانی
-            </Button>
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <Link
-              href="/"
-              style={{
-                width: "100%",
-                textDecoration: "none",
-              }}
-            >
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{
-                  mb: 1,
-                  bgcolor: "var(--blackBG)",
-                  justifyContent: "flex-start",
-                  flexDirection: "row-reverse",
-                  "&:hover": {
-                    bgcolor: "transparent",
-                    color: "text.primary",
-                  },
-                }}
-                startIcon={null}
-              >
-                صفحه اصلی
-              </Button>
-            </Link>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleLogout}
-              fullWidth
-              sx={{
-                justifyContent: "flex-start",
-                flexDirection: "row-reverse",
-              }}
-              startIcon={null}
-            >
-              خروج از حساب
-            </Button>
-          </Box>
+            <ChevronSvg open={mobileOpen} />
+          </IconButton>
+
+          <DashUserProfile fullName={fullName} university={university} compact />
         </Box>
+
+        <Collapse in={mobileOpen} timeout="auto" unmountOnExit>
+          <Divider sx={{ my: 2, borderColor: "var(--border)" }} />
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, pb: 1 }}>
+            {tabNavigation}
+            <DashNavActions onLogout={handleLogout} compact />
+          </Box>
+        </Collapse>
       </Box>
-    </Box>
+    </>
   );
 }

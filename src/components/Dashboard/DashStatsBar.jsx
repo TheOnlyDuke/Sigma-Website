@@ -1,63 +1,87 @@
-import Grid from "@mui/material/Grid";
-import { Card, Typography } from "@mui/material";
+"use client";
+import { Box, Typography } from "@mui/material";
 import { useAuth } from "@/contexts/AuthContext";
+import { mockUserData } from "@/utils/dummydatas";
 
 export default function DashStatsBar() {
   const { USER_INFO } = useAuth();
 
   const stats = [
     {
-      value: USER_INFO?.score || 0,
-      label: "امتیاز خام شما",
+      value: USER_INFO?.score || mockUserData.score,
+      labelDesktop: "امتیاز خالص شما",
+      labelMobile: "امتیاز شما",
     },
     {
-      value: USER_INFO?.rank || "N/A",
-      label: "رتبه شما",
+      value: USER_INFO?.rank || mockUserData.rank,
+      labelDesktop: "رتبه شما",
+      labelMobile: "رتبه شما",
     },
     {
-      value: USER_INFO?.solved_questions || 0,
-      label: "سوالات حل شده",
+      value: USER_INFO?.solved_questions || mockUserData.solved_questions,
+      labelDesktop: "سوالات حل شده",
+      labelMobile: "سوالات حل شده",
     },
   ];
 
   return (
-    <Grid
-      container
-      spacing={3}
+    <Box
       sx={{
-        bgcolor: "primary.main",
-        borderRadius: "var(--border-radius)",
-        justifyContent: "center",
+        width: "100%",
+        height: { xs: 160, md: 218 },
+        bgcolor: "var(--activeBG)",
+        borderRadius: "20px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around",
+        px: { xs: 2, sm: 4, md: 6 },
+        boxSizing: "border-box",
+        direction: "rtl",
       }}
     >
       {stats.map((stat, index) => (
-        <Grid key={index} xs={12} sm={3}>
-          <Card
-            elevation={2}
+        <Box
+          key={index}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            flex: 1,
+          }}
+        >
+          <Typography
             sx={{
-              p: 3,
-              bgcolor: "transparent",
-              boxShadow: "none",
-              color: "white",
-              textAlign: "center",
-              transition: "transform 0.2s",
-              "&:hover": {
-                transform: "translateY(-5px)",
-              },
+              color: "#FFFFFF",
+              fontSize: { xs: "14px", sm: "16px", md: "17px" },
+              fontWeight: 500,
+              fontFamily: "inherit",
+              lineHeight: 1.4,
             }}
           >
-            <Typography
-              variant="smallTitle"
-              sx={{ color: "var(--activeText)" }}
-            >
-              {stat.label}
-            </Typography>
-            <Typography variant="title" sx={{ color: "var(--activeText)" }}>
-              {stat.value}
-            </Typography>
-          </Card>
-        </Grid>
+            <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>
+              {stat.labelDesktop}
+            </Box>
+            <Box component="span" sx={{ display: { xs: "inline", sm: "none" } }}>
+              {stat.labelMobile}
+            </Box>
+          </Typography>
+
+          <Typography
+            sx={{
+              color: "#FFFFFF",
+              fontSize: { xs: "28px", sm: "34px", md: "40px" },
+              fontWeight: 900,
+              fontFamily: "inherit",
+              mt: { xs: 1, md: 1.5 },
+              lineHeight: 1.2,
+            }}
+          >
+            {stat.value}
+          </Typography>
+        </Box>
       ))}
-    </Grid>
+    </Box>
   );
 }

@@ -5,6 +5,14 @@ export const config = {
 };
 
 export function proxy(request) {
+  // Dev Mode Bypass: Skip auth check when NEXT_PUBLIC_DEV_BYPASS_AUTH is true
+  const devBypass = process.env.NEXT_PUBLIC_DEV_BYPASS_AUTH === "true";
+
+  if (devBypass) {
+    return NextResponse.next();
+  }
+
+  // Production: Check for access token cookie
   const accessToken = request.cookies.get("access_token");
 
   if (

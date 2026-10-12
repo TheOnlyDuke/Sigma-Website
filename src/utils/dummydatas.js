@@ -153,7 +153,7 @@ export const descriptions = {
 
 export const records = [
   {
-    subject: "مباحث تاریخ (سخت)",
+    subject: "مباحث تابع (سخت)",
     correct: 24,
     incorrect: 6,
     score: 145,
@@ -548,3 +548,109 @@ export const staffData = {
     },
   ],
 };
+
+// Dashboard Topics Data (Tab 2)
+export const dashboardTopics = [
+  {
+    id: 1,
+    name: "انتگرال",
+    score: 145,
+    totalQuestions: 250,
+    solvedQuestions: 100,
+  },
+  {
+    id: 2,
+    name: "مشتق",
+    score: 125,
+    totalQuestions: 250,
+    solvedQuestions: 120,
+  },
+  {
+    id: 3,
+    name: "حد و پیوستگی",
+    score: 98,
+    totalQuestions: 180,
+    solvedQuestions: 85,
+  },
+  {
+    id: 4,
+    name: "ماتریکس",
+    score: 114,
+    totalQuestions: 200,
+    solvedQuestions: 95,
+  },
+];
+
+// Dashboard Notifications Data (Tab 3)
+export const dashboardNotifications = [
+  {
+    id: 1,
+    title: "مبحث جدید",
+    description: "مبحث جدید تابع را میتو...",
+    date: "1404/02/23",
+    icon: "📘",
+  },
+  {
+    id: 2,
+    title: "مبحث جدید",
+    description: "مبحث جدید تابع را میتو...",
+    date: "1404/02/23",
+    icon: "📘",
+  },
+  {
+    id: 3,
+    title: "مبحث جدید",
+    description: "مبحث جدید تابع را میتو...",
+    date: "1404/02/23",
+    icon: "📘",
+  },
+  {
+    id: 4,
+    title: "به‌روزرسانی سیستم",
+    description: "نسخه جدید سیستم منتشر شد",
+    date: "1404/02/20",
+    icon: "🔔",
+  },
+  {
+    id: 5,
+    title: "رویداد ویژه",
+    description: "مسابقه حل سوال این هفته",
+    date: "1404/02/18",
+    icon: "🏆",
+  },
+];
+
+export const mockUserData = {
+  user: {
+    full_name: "کاربر توسعهدهنده",
+    first_name: "کاربر",
+    last_name: "توسعهدهنده",
+    phone_number: "09123456789",
+    university: "حکیم سبزواری",
+  },
+  score: 117,
+  rank: 12,
+  solved_questions: 1156,
+};
+
+export const dashboardNavItems = [
+  { id: "stats", label: "آمار من", tabIndex: 0, icon: "Amar" },
+  { id: "topics", label: "مباحث", tabIndex: 1, icon: "Mobahes" },
+  { id: "notifications", label: "اطلاع رسانی", tabIndex: 2, icon: "Notif" },
+];
+
+export const statsTableHeaders = [
+  "تاریخچه حل سوالات",
+  "زمان و تاریخ",
+  "امتیاز دریافتی",
+  "تعداد نادرست و درست‌ها",
+  "دسترسی‌ها",
+];
+
+export const topicsTableHeaders = [
+  "نام مبحث",
+  "امتیاز فعلی شما",
+  "سوالات حل شده",
+  "کل سوالات",
+  "شروع",
+];

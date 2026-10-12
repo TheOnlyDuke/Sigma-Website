@@ -2,8 +2,11 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { apiClient } from "@/utils/api";
 import { cookieStorage } from "@/utils/cookies";
+import { mockUserData } from "@/utils/dummydatas";
 
 const AuthContext = createContext();
+
+const DEV_BYPASS_AUTH = process.env.NEXT_PUBLIC_DEV_BYPASS_AUTH === "true";
 
 export const AuthProvider = ({ children }) => {
   const [USER_INFO, SET_USER_INFO] = useState(null);
@@ -45,6 +48,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    // Dev Mode: Bypass authentication and use mock data
+    if (DEV_BYPASS_AUTH) {
+      SET_USER_INFO(mockUserData);
+      SET_ACCESS_TOKEN("dev-mock-token");
+      SET_REFRESH_TOKEN("dev-mock-refresh-token");
+      setIsLoading(false);
+      return;
+    }
+
     const token = cookieStorage.getAccessToken();
     const userInfo = cookieStorage.getUserInfo();
 

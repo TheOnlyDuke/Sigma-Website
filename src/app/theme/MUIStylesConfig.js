@@ -174,6 +174,10 @@ const muiCssBaseline = {
 	  url('/fonts/woff2/IRANYekanX-Regular.woff2') format('woff2');	
   }
 
+  html, body {
+    font-family: "IRANYekanX", sans-serif;
+  }
+
   * {
     font-family: "IRANYekanX", sans-serif;
     box-shadow: none !important;
@@ -192,6 +196,28 @@ const muiTypography = {
   },
 };
 
+const muiTableCell = {
+  styleOverrides: {
+    root: {
+      fontFamily: "IRANYekanX, sans-serif",
+    },
+    head: {
+      fontFamily: "IRANYekanX, sans-serif",
+    },
+    body: {
+      fontFamily: "IRANYekanX, sans-serif",
+    },
+  },
+};
+
+const muiTable = {
+  styleOverrides: {
+    root: {
+      fontFamily: "IRANYekanX, sans-serif",
+    },
+  },
+};
+
 const componentsStyles = {
   MuiButton: buttonStyle,
   MuiTextField: muiTextField,
@@ -202,6 +228,8 @@ const componentsStyles = {
   MuiCssBaseline: muiCssBaseline,
   MuiPaper: muiPaper,
   MuiCard: muiCard,
+  MuiTable: muiTable,
+  MuiTableCell: muiTableCell,
 };
 
 const getTypography = (theme) => ({
@@ -333,6 +361,9 @@ const createCustomTheme = (mode) => {
             },
           },
     breakpoints: customBreakpoints,
+    typography: {
+      fontFamily: "IRANYekanX, sans-serif",
+    },
   });
 
   return createTheme(themeBase, {
