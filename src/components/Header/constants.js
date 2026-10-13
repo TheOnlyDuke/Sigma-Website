@@ -19,7 +19,11 @@ export const HEADER_STYLES = {
     fontSize: "14px",
     fontWeight: 600,
     whiteSpace: "nowrap",
+    cursor: "pointer",
     transition: "background-color 200ms ease-in-out",
+    "& *": {
+      cursor: "pointer",
+    },
     "&:hover": {
       backgroundColor: "var(--blackBG)",
       cursor: "pointer",

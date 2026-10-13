@@ -92,7 +92,7 @@ function Header() {
             >
               <Link
                 href={USER_INFO ? "/dashboard" : "/auth"}
-                style={{ textDecoration: "none" }}
+                style={{ textDecoration: "none", cursor: "pointer" }}
               >
                 <Box sx={HEADER_STYLES.signUpButton}>
                   {USER_INFO ? (
@@ -180,7 +180,10 @@ function Header() {
               }}
             >
               {USER_INFO && (
-                <Link href="/dashboard" style={{ textDecoration: "none" }}>
+                <Link
+                  href="/dashboard"
+                  style={{ textDecoration: "none", cursor: "pointer" }}
+                >
                   <Box
                     sx={{
                       ...HEADER_STYLES.signUpButton,
