@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Box, CircularProgress, Alert, Button, Typography } from "@mui/material";
 import DashSidebar from "@/components/Dashboard/DashSidebar";
 import DashTabNavigation from "@/components/Dashboard/DashTabNavigation";
@@ -8,6 +8,19 @@ import DashTopicsTab from "@/components/Dashboard/DashTopicsTab";
 import DashNotificationsTab from "@/components/Dashboard/DashNotificationsTab";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+
+const HASH_TO_TAB = {
+  stats: 0,
+  topics: 1,
+  notifs: 2,
+  notifications: 2,
+};
+
+const TAB_TO_HASH = {
+  0: "stats",
+  1: "topics",
+  2: "notifs",
+};
 
 const LogoutSvg = ({ color = "#FFFFFF" }) => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -25,6 +38,35 @@ export default function Dashboard() {
   const { USER_INFO, isLoading, clearAuth } = useAuth();
   const [activeTab, setActiveTab] = useState(0);
   const router = useRouter();
+
+  useEffect(() => {
+    const syncTabFromHash = () => {
+      const hash = window.location.hash.replace(/^#/, "").split("?")[0].toLowerCase();
+      if (hash && HASH_TO_TAB[hash] !== undefined) {
+        setActiveTab(HASH_TO_TAB[hash]);
+      } else if (!hash) {
+        setActiveTab(0);
+      }
+    };
+
+    syncTabFromHash();
+
+    window.addEventListener("hashchange", syncTabFromHash);
+    window.addEventListener("popstate", syncTabFromHash);
+
+    return () => {
+      window.removeEventListener("hashchange", syncTabFromHash);
+      window.removeEventListener("popstate", syncTabFromHash);
+    };
+  }, []);
+
+  const handleTabChange = useCallback((newIndex) => {
+    setActiveTab(newIndex);
+    const targetHash = TAB_TO_HASH[newIndex] || "stats";
+    if (window.location.hash !== `#${targetHash}`) {
+      window.history.pushState(null, "", `#${targetHash}`);
+    }
+  }, []);
 
   const handleLogout = async () => {
     await clearAuth();
@@ -92,7 +134,7 @@ export default function Dashboard() {
           tabNavigation={
             <DashTabNavigation
               activeTab={activeTab}
-              onTabChange={setActiveTab}
+              onTabChange={handleTabChange}
             />
           }
         />

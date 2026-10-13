@@ -20,7 +20,7 @@ export default function DownloadOptions() {
         },
       }}
     >
-      <Grid item xs={6}>
+      <Grid size={{ xs: 6 }}>
         <a href="https://google.com" target="_blank" rel="noopener noreferrer">
           <Image
             src={GooglePLay}
@@ -30,7 +30,7 @@ export default function DownloadOptions() {
           />
         </a>
       </Grid>
-      <Grid item xs={6}>
+      <Grid size={{ xs: 6 }}>
         <a href="https://google.com" target="_blank" rel="noopener noreferrer">
           <Image
             src={AppStore}
@@ -40,7 +40,7 @@ export default function DownloadOptions() {
           />
         </a>
       </Grid>
-      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+      <Grid size={{ xs: 12 }} sx={{ display: "flex", justifyContent: "center" }}>
         <a
           href="https://google.com"
           target="_blank"

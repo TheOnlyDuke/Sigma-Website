@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import { useState, useCallback, memo } from "react";
 import { useScrollVisibility } from "@/hooks/useScrollVisibility";
 import Link from "next/link";
+import Image from "next/image";
 import ThemeToggle from "./ThemeToggleButton";
 import HeaderMenu from "./HeaderMenu";
 import { useAuth } from "@/contexts/AuthContext";
@@ -86,19 +87,147 @@ function Header() {
                 ...HEADER_STYLES.flex,
                 alignItems: "center",
                 display: { xs: "none", sm: "flex" },
+                gap: "10px",
               }}
             >
-              <Typography sx={HEADER_STYLES.signUpButton}>
-                <Link href={USER_INFO ? "/dashboard" : "/auth"}>
-                  {USER_INFO
-                    ? `داشبورد - ${USER_INFO.user.full_name}`
-                    : "ورود یا ثبت نام"}
-                </Link>
-              </Typography>
+              <Link
+                href={USER_INFO ? "/dashboard" : "/auth"}
+                style={{ textDecoration: "none" }}
+              >
+                <Box sx={HEADER_STYLES.signUpButton}>
+                  {USER_INFO ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        direction: "rtl",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: 26,
+                          height: 26,
+                          borderRadius: "8px",
+                          bgcolor: "rgba(255, 255, 255, 0.2)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          overflow: "hidden",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Image
+                          src="/images/profile-sticker.png"
+                          alt={USER_INFO?.user?.full_name || "کاربر"}
+                          width={22}
+                          height={22}
+                          style={{ objectFit: "contain" }}
+                        />
+                      </Box>
+                      <Typography
+                        component="span"
+                        sx={{
+                          fontFamily: "inherit",
+                          fontSize: "14px",
+                          fontWeight: 600,
+                          color: "#FFFFFF",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {USER_INFO?.user?.full_name}
+                      </Typography>
+                      <Box
+                        component="span"
+                        sx={{
+                          fontSize: "12px",
+                          fontWeight: 500,
+                          bgcolor: "rgba(255, 255, 255, 0.2)",
+                          color: "#FFFFFF",
+                          px: "8px",
+                          py: "2px",
+                          borderRadius: "6px",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        داشبورد
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontFamily: "inherit",
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: "#FFFFFF",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      ورود یا ثبت نام
+                    </Typography>
+                  )}
+                </Box>
+              </Link>
               <ThemeToggle />
             </Box>
 
-            <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+            <Box
+              sx={{
+                display: { xs: "flex", sm: "none" },
+                alignItems: "center",
+                gap: 1.5,
+              }}
+            >
+              {USER_INFO && (
+                <Link href="/dashboard" style={{ textDecoration: "none" }}>
+                  <Box
+                    sx={{
+                      ...HEADER_STYLES.signUpButton,
+                      minWidth: "auto",
+                      height: "36px",
+                      px: "12px",
+                      gap: "6px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 20,
+                        height: 20,
+                        borderRadius: "6px",
+                        bgcolor: "rgba(255, 255, 255, 0.2)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Image
+                        src="/images/profile-sticker.png"
+                        alt={USER_INFO?.user?.full_name || "کاربر"}
+                        width={18}
+                        height={18}
+                        style={{ objectFit: "contain" }}
+                      />
+                    </Box>
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontFamily: "inherit",
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        color: "#FFFFFF",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      داشبورد
+                    </Typography>
+                  </Box>
+                </Link>
+              )}
+              <ThemeToggle />
               <MenuIcon />
             </Box>
           </Toolbar>
