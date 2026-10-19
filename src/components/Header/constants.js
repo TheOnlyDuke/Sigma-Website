@@ -4,10 +4,10 @@ export const HEADER_STYLES = {
     justifyContent: "space-between",
   },
   signUpButton: {
-    minWidth: "140px",
+    minWidth: { xs: "auto", sm: "130px", md: "140px" },
     width: "auto",
-    height: "48px",
-    px: "18px",
+    height: { xs: "38px", sm: "42px", md: "46px" },
+    px: { xs: "12px", sm: "14px", md: "18px" },
     backgroundColor: "var(--activeBG)",
     borderRadius: "12px",
     color: "#FFFFFF",
@@ -20,7 +20,7 @@ export const HEADER_STYLES = {
     fontWeight: 600,
     whiteSpace: "nowrap",
     cursor: "pointer",
-    transition: "background-color 200ms ease-in-out",
+    transition: "background-color 200ms ease-in-out, transform 150ms ease",
     "& *": {
       cursor: "pointer",
     },
@@ -28,32 +28,15 @@ export const HEADER_STYLES = {
       backgroundColor: "var(--blackBG)",
       cursor: "pointer",
     },
-  },
-  menu: {
-    backdrop: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      zIndex: 1000,
-    },
-    container: {
-      position: "fixed",
-      top: "105px",
-      left: 0,
-      width: "100%",
-      backgroundColor: "var(--notActiveBG)",
-      padding: "16px",
-      zIndex: 1001,
-      boxShadow: "0px 5px 5px -3px rgba(0,0,0,0.2)",
+    "&:focus-visible": {
+      outline: "2px solid var(--activeBG)",
+      outlineOffset: "2px",
     },
   },
 };
 
 export const NAVIGATION_ITEMS = [
-  { href: "/learning", label: "مباحث", menuId: "subjects" },
-  { href: "/blogs", label: "وبلاگ", menuId: "blogs" },
+  { href: "/topics", label: "مباحث", menuId: "subjects" },
+  { href: "/blog", label: "وبلاگ", menuId: "blogs" },
   { href: "/leaderboard", label: "لیدربورد" },
 ];

@@ -14,7 +14,7 @@ const StartArrowSvg = ({ color = "#969696" }) => (
 export function DashTopicDesktopRow({ topic }) {
   return (
     <Link
-      href="/learning"
+      href="/topics"
       style={{ textDecoration: "none", color: "inherit" }}
     >
       <Box
@@ -111,7 +111,7 @@ export function DashTopicDesktopRow({ topic }) {
 export function DashTopicMobileRow({ topic }) {
   return (
     <Link
-      href="/learning"
+      href="/topics"
       style={{ textDecoration: "none", color: "inherit" }}
     >
       <Box

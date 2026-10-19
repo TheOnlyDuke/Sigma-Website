@@ -1,73 +1,176 @@
 "use client";
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
-import { useState, useCallback, memo } from "react";
+import React, { useState, useCallback, useEffect, useRef, memo } from "react";
+import { AppBar, Toolbar, Typography, Box, IconButton, useMediaQuery } from "@mui/material";
 import { useScrollVisibility } from "@/hooks/useScrollVisibility";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggleButton";
 import HeaderMenu from "./HeaderMenu";
+import NavigationLink from "./NavigationLink";
+import MobileDrawer from "./MobileDrawer";
 import { useAuth } from "@/contexts/AuthContext";
 import ResponsiveContainer from "../ResponsiveContainer";
 import { HEADER_STYLES, NAVIGATION_ITEMS } from "./constants";
 import { MenuIcon } from "./MenuIcon";
 
-const NavigationLink = memo(({ href, label, onMouseEnter, onClick }) => (
-  <Link href={href} onMouseEnter={onMouseEnter} onClick={onClick}>
-    {label}
-  </Link>
-));
-NavigationLink.displayName = "NavigationLink";
-
 function Header() {
   const [openMenu, setOpenMenu] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const appBarRef = useRef(null);
   const { isVisible } = useScrollVisibility("hero-section");
-  const { USER_INFO } = useAuth();
+  const { USER_INFO, clearAuth } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+  const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("sm"));
+
+  useEffect(() => {
+    if (isDesktop && mobileOpen) {
+      setMobileOpen(false);
+    }
+  }, [isDesktop, mobileOpen]);
 
   const handleMouseEnter = useCallback((menuId) => {
     setOpenMenu(menuId);
-    document.body.style.overflow = "hidden";
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     setOpenMenu(null);
-    document.body.style.overflow = "";
   }, []);
 
+  const toggleMenu = useCallback((menuId) => {
+    setOpenMenu((prev) => (prev === menuId ? null : menuId));
+  }, []);
+
+  // Close dropdown on click outside or Escape key
+  useEffect(() => {
+    if (!openMenu) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setOpenMenu(null);
+      }
+    };
+
+    const handleClickOutside = (e) => {
+      if (appBarRef.current && !appBarRef.current.contains(e.target)) {
+        setOpenMenu(null);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handleClickOutside);
+    };
+  }, [openMenu]);
+
+  const handleDrawerToggle = useCallback(() => {
+    setMobileOpen((prev) => !prev);
+  }, []);
+
+  const handleDrawerClose = useCallback(() => {
+    setMobileOpen(false);
+  }, []);
+
+  const handleLogout = useCallback(async () => {
+    await clearAuth();
+    router.push("/auth/login");
+  }, [clearAuth, router]);
+
   return (
-    <div onMouseLeave={handleMouseLeave}>
+    <Box sx={{ position: "relative" }}>
+      {/* Dim page body below Header when dropdown is open, without dimming the Header/Navbar */}
+      {openMenu && (
+        <Box
+          onClick={handleMouseLeave}
+          aria-hidden="true"
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.25)",
+            backdropFilter: "blur(2px)",
+            zIndex: 1090,
+          }}
+        />
+      )}
       <AppBar
+        ref={appBarRef}
+        component="header"
         position="fixed"
+        onMouseLeave={handleMouseLeave}
         sx={{
           backgroundColor: "var(--notActiveBG)",
           height: "fit-content",
           boxShadow: "none",
-          py: "15px",
-          transition: "transform 0.3s ease-in-out",
+          borderBottom: "1px solid var(--border)",
+          py: { xs: "10px", sm: "12px", md: "14px" },
+          transition:
+            "transform 0.3s ease-in-out, background-color 0.2s ease, border-color 0.2s ease",
           transform: isVisible ? "translateY(0)" : "translateY(-100%)",
+          zIndex: 1100,
         }}
       >
-        <ResponsiveContainer maxWidth="lg">
+        <ResponsiveContainer
+          maxWidth="lg"
+          sx={{
+            px: { xs: "16px", sm: "32px", md: "48px", lg: "128px" },
+          }}
+        >
           <Toolbar
             disableGutters
             sx={{
-              ...HEADER_STYLES.flex,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
               direction: "rtl",
-              mx: { xs: "25px", lgp: "0" },
+              width: "100%",
+              minHeight: { xs: "48px", sm: "52px" },
             }}
           >
+            {/* Right side in RTL: Brand Logo & Desktop Navigation */}
             <Box
-              sx={{ ...HEADER_STYLES.flex, width: "25%", alignItems: "center" }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: { sm: 2.5, md: 4, lg: 5 },
+              }}
             >
-              <Link href="/" style={{ marginLeft: "15px" }}>
-                <Typography variant="smallTitle">سیگما</Typography>
+              <Link
+                href="/"
+                style={{
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  variant="smallTitle"
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: { xs: "20px", md: "22px" },
+                    color: "var(--primary-text)",
+                    transition: "color 0.2s ease",
+                    "&:hover": { color: "var(--activeBG)" },
+                  }}
+                >
+                  سیگما
+                </Typography>
               </Link>
 
+              {/* Desktop Navigation Links */}
               <Box
+                component="nav"
+                aria-label="منوی اصلی"
                 sx={{
-                  ...HEADER_STYLES.flex,
-                  width: "70%",
-                  color: "var(--secondary-text)",
                   display: { xs: "none", sm: "flex" },
+                  alignItems: "center",
+                  gap: { sm: 0.5, md: 1, lg: 1.5 },
                 }}
               >
                 {NAVIGATION_ITEMS.map(({ href, label, menuId }) => (
@@ -75,19 +178,32 @@ function Header() {
                     key={href}
                     href={href}
                     label={label}
-                    onMouseEnter={() => menuId && handleMouseEnter(menuId)}
+                    menuId={menuId}
+                    isOpen={openMenu === menuId}
+                    isActive={
+                      pathname === href ||
+                      (href !== "/" && pathname?.startsWith(`${href}/`))
+                    }
+                    onMouseEnter={() => {
+                      if (menuId) {
+                        handleMouseEnter(menuId);
+                      } else {
+                        handleMouseLeave();
+                      }
+                    }}
+                    onToggle={toggleMenu}
                     onClick={handleMouseLeave}
                   />
                 ))}
               </Box>
             </Box>
 
+            {/* Left side in RTL: Desktop Actions (Auth button + Theme toggle) */}
             <Box
               sx={{
-                ...HEADER_STYLES.flex,
-                alignItems: "center",
                 display: { xs: "none", sm: "flex" },
-                gap: "10px",
+                alignItems: "center",
+                gap: { sm: 1, md: 1.5 },
               }}
             >
               <Link
@@ -129,10 +245,13 @@ function Header() {
                         component="span"
                         sx={{
                           fontFamily: "inherit",
-                          fontSize: "14px",
+                          fontSize: { sm: "13px", md: "14px" },
                           fontWeight: 600,
                           color: "#FFFFFF",
                           whiteSpace: "nowrap",
+                          maxWidth: { sm: "100px", md: "140px", lg: "180px" },
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
                         }}
                       >
                         {USER_INFO?.user?.full_name}
@@ -140,11 +259,11 @@ function Header() {
                       <Box
                         component="span"
                         sx={{
-                          fontSize: "12px",
-                          fontWeight: 500,
+                          fontSize: "11px",
+                          fontWeight: 600,
                           bgcolor: "rgba(255, 255, 255, 0.2)",
                           color: "#FFFFFF",
-                          px: "8px",
+                          px: "7px",
                           py: "2px",
                           borderRadius: "6px",
                           whiteSpace: "nowrap",
@@ -169,17 +288,18 @@ function Header() {
                   )}
                 </Box>
               </Link>
-              <ThemeToggle />
+              <ThemeToggle size={42} iconSize={22} />
             </Box>
 
+            {/* Left side in RTL: Mobile Actions (Mini auth + Theme toggle + Hamburger button) */}
             <Box
               sx={{
                 display: { xs: "flex", sm: "none" },
                 alignItems: "center",
-                gap: 1.5,
+                gap: { xs: 0.8, sm: 1.2 },
               }}
             >
-              {USER_INFO && (
+              {USER_INFO ? (
                 <Link
                   href="/dashboard"
                   style={{ textDecoration: "none", cursor: "pointer" }}
@@ -189,7 +309,7 @@ function Header() {
                       ...HEADER_STYLES.signUpButton,
                       minWidth: "auto",
                       height: "36px",
-                      px: "12px",
+                      px: "10px",
                       gap: "6px",
                       borderRadius: "10px",
                     }}
@@ -219,7 +339,7 @@ function Header() {
                       component="span"
                       sx={{
                         fontFamily: "inherit",
-                        fontSize: "13px",
+                        fontSize: "12px",
                         fontWeight: 600,
                         color: "#FFFFFF",
                         whiteSpace: "nowrap",
@@ -229,18 +349,63 @@ function Header() {
                     </Typography>
                   </Box>
                 </Link>
+              ) : (
+                <Link
+                  href="/auth"
+                  style={{ textDecoration: "none", cursor: "pointer" }}
+                >
+                  <Box
+                    sx={{
+                      ...HEADER_STYLES.signUpButton,
+                      minWidth: "auto",
+                      height: "36px",
+                      px: "12px",
+                      borderRadius: "10px",
+                      fontSize: "13px",
+                    }}
+                  >
+                    ورود
+                  </Box>
+                </Link>
               )}
-              <ThemeToggle />
-              <MenuIcon />
+              <ThemeToggle size={36} iconSize={20} />
+              <IconButton
+                onClick={handleDrawerToggle}
+                aria-label={mobileOpen ? "بستن منوی ناوبری" : "باز کردن منوی ناوبری"}
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-navigation-drawer"
+                sx={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: "10px",
+                  color: "var(--primary-text)",
+                  transition: "background-color 0.2s ease",
+                  "&:hover": {
+                    bgcolor: "rgba(0, 0, 0, 0.05)",
+                  },
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
             </Box>
           </Toolbar>
         </ResponsiveContainer>
+
+        {/* Desktop Dropdown Mega-Menu attached directly to AppBar */}
+        {openMenu && (
+          <HeaderMenu handleMouseLeave={handleMouseLeave} openMenu={openMenu} />
+        )}
       </AppBar>
 
-      {openMenu && (
-        <HeaderMenu handleMouseLeave={handleMouseLeave} openMenu={openMenu} />
-      )}
-    </div>
+      {/* Mobile Navigation Drawer */}
+      <MobileDrawer
+        open={mobileOpen}
+        onClose={handleDrawerClose}
+        navigationItems={NAVIGATION_ITEMS}
+        userInfo={USER_INFO}
+        onLogout={handleLogout}
+      />
+    </Box>
   );
 }
 

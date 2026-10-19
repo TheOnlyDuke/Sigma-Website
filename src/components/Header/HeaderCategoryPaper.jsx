@@ -17,7 +17,8 @@ export default function CategoryPaper({
         border: "1px solid",
         borderColor: "var(--border)",
         borderRadius: "20px",
-        width: "340px",
+        width: "100%",
+        maxWidth: "340px",
         direction: "ltr",
         transition: "background-color 250ms ease-in-out",
         cursor: "pointer",
@@ -47,7 +48,7 @@ export default function CategoryPaper({
     >
       <Grid container sx={{ alignItems: "center" }} spacing={2}>
         <Grid
-          xs={2}
+          size={{ xs: 2 }}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -73,7 +74,7 @@ export default function CategoryPaper({
           <ArrowLeft />
         </Grid>
         <Grid
-          xs={10}
+          size={{ xs: 10 }}
           sx={{
             display: "flex",
             flexDirection: "column",

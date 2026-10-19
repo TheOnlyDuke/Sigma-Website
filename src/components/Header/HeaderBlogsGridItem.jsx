@@ -1,9 +1,18 @@
 import { Box, Typography, Paper, SvgIcon } from "@mui/material";
 import Link from "next/link";
 
-export default function HeaderBlogsItem({ title, description, icon, onClick }) {
+export default function HeaderBlogsItem({
+  title,
+  slug,
+  href,
+  description,
+  icon,
+  onClick,
+}) {
+  const targetHref = href || (slug ? `/blog/${slug}` : `/blog/${title}`);
+
   return (
-    <Link href={`/blogs/${title}`} onClick={onClick}>
+    <Link href={targetHref} onClick={onClick}>
       <Paper
         sx={{
           p: "40px",

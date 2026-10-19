@@ -1,46 +1,20 @@
 "use client";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box, Typography, Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useState, useEffect, useCallback } from "react";
-import { useParams, notFound } from "next/navigation";
-import { getTopicBySlug } from "@/utils/dummydatas";
 import {
   LearningVideoCard,
   LearningPagination,
   ProfessorNotes,
 } from "@/components/mainPage/Learning";
 
-const formatTitle = (raw, topic) => {
-  if (topic?.title) return topic.title;
-  switch (raw) {
-    case "integral":
-      return "انتگرال";
-    case "derivative":
-      return "مشتق";
-    default:
-      return raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : "";
-  }
-};
-
-export default function LearningPage() {
-  const params = useParams();
-  const rawId = params?.["learn-sec"];
-
-  // Validate the dynamic slug against the data layer
-  const topic = getTopicBySlug(rawId);
-
-  // If topic does not exist, trigger the existing Next.js 404 page
-  if (!topic) {
-    notFound();
-  }
-
-  const episodes = topic.episodes || [];
+export default function TopicDetailView({ topic }) {
+  const episodes = topic?.episodes || [];
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
 
-  // Reset to first episode when topic changes
   useEffect(() => {
     setCurrentEpisodeIndex(0);
-  }, [rawId]);
+  }, [topic?.id, topic?.slug]);
 
   const currentEpisode = episodes[currentEpisodeIndex] || episodes[0];
 
@@ -54,7 +28,7 @@ export default function LearningPage() {
     [episodes.length]
   );
 
-  const topicTitle = formatTitle(rawId, topic);
+  const topicTitle = topic?.title || topic?.name || "";
 
   return (
     <Container
@@ -78,13 +52,7 @@ export default function LearningPage() {
         },
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {/* ── Section Title (Slightly reduced vertical gap matching Figma) ── */}
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Box
           sx={{
             width: "100%",
@@ -110,15 +78,11 @@ export default function LearningPage() {
           </Typography>
         </Box>
 
-        {/* ── Description + Video Grid ────────────────────────── */}
-        {/* LTR grid: description has order-2 on md (right) and order-1 on xs (top)
-            Video has order-1 on md (left) and order-2 on xs (bottom) */}
         <Grid
           container
           spacing={4}
           sx={{ width: "100%", alignItems: "flex-start" }}
         >
-          {/* Description Column — right side on desktop, top on mobile */}
           <Grid
             size={{ xs: 12, md: 6 }}
             sx={{
@@ -148,8 +112,6 @@ export default function LearningPage() {
             </Box>
           </Grid>
 
-          {/* Video Column — left side on desktop, bottom on mobile */}
-          {/* Episode pagination placed directly below the video, centered */}
           <Grid
             size={{ xs: 12, md: 6 }}
             sx={{
@@ -166,7 +128,6 @@ export default function LearningPage() {
               videoSrc={currentEpisode?.videoUrl || currentEpisode?.videoSrc}
             />
 
-            {/* Episode Navigation directly below video */}
             {episodes.length > 0 && (
               <LearningPagination
                 chapters={episodes}
@@ -177,8 +138,7 @@ export default function LearningPage() {
           </Grid>
         </Grid>
 
-        {/* ── Professor Notes (Dynamic lecture data) ────────── */}
-        {topic.lectures && topic.lectures.length > 0 && (
+        {topic?.lectures && topic.lectures.length > 0 && (
           <Box sx={{ width: "100%", mt: { xs: "48px", sm: "64px", md: "80px" } }}>
             <ProfessorNotes notes={topic.lectures} />
           </Box>

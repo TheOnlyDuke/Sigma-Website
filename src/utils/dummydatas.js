@@ -10,8 +10,8 @@ export const universities = [
 import mosalasat from "../../public/images/subjects/mosalasat.png";
 import degree2 from "../../public/images/subjects/degree2.png";
 export const subjects = [
-  { id: 1, name: "انتگرال", numOfEp: 15, difficulty: 3, icon: mosalasat },
-  { id: 2, name: "مشتق", numOfEp: 16, difficulty: 2, icon: degree2 },
+  { id: 1, name: "انتگرال", slug: "integral", numOfEp: 15, difficulty: 3, icon: mosalasat },
+  { id: 2, name: "مشتق", slug: "derivative", numOfEp: 16, difficulty: 2, icon: degree2 },
 ];
 
 import { OpenBook, Pencil, RescueTube } from "./icons";
@@ -19,18 +19,22 @@ export const blogs = [
   {
     id: 1,
     title: "مقالات آموزشی",
+    slug: "articles",
     description: "نوشته های با هدف آگاهی بیشتر",
     icon: <OpenBook />,
   },
   {
     id: 2,
     title: "راهنمای استفاده",
+    slug: "howto",
+    href: "/howto",
     description: "آموزش استفاده از خدمات مجموعه",
     icon: <RescueTube />,
   },
   {
     id: 3,
     title: "جزوات درسی",
+    slug: "booklets",
     description: "جمع بندیت با ما",
     icon: <Pencil />,
   },

@@ -7,22 +7,22 @@ export default function FooterSideMenues({ menu }) {
     ourTeam: {
       title: "تیم ما",
       items: [
-        ["درباره ما", "\\about"],
-        ["تماس با ما", "\\about"],
+        ["درباره ما", "/about"],
+        ["تماس با ما", "/about"],
       ],
     },
     pops: {
       title: "مباحث پرطرفدار",
       items: [
-        ["انتگرال", "\\learning\\انتگرال"],
-        ["مشتق", "\\learning\\مشتق"],
+        ["انتگرال", "/topics/integral"],
+        ["مشتق", "/topics/derivative"],
       ],
     },
     products: {
       title: "دیگر محصولات",
       items: [
-        ["ویدئو های آموزشی", "\\"],
-        ["جزوات و جمع بندی", "\\"],
+        ["ویدئو های آموزشی", "/"],
+        ["جزوات و جمع بندی", "/"],
       ],
     },
     menu: {

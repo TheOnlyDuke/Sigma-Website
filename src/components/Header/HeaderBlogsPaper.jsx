@@ -27,6 +27,8 @@ export default function HeaderBlogsPaper({ items, onClick }) {
                 <HeaderBlogsItem
                   icon={item.icon}
                   title={item.title}
+                  slug={item.slug}
+                  href={item.href}
                   description={item.description}
                   onClick={onClick}
                 />
@@ -38,6 +40,8 @@ export default function HeaderBlogsPaper({ items, onClick }) {
               <HeaderBlogsItem
                 icon={group[2].icon}
                 title={group[2].title}
+                slug={group[2].slug}
+                href={group[2].href}
                 description={group[2].description}
                 onClick={onClick}
               />
