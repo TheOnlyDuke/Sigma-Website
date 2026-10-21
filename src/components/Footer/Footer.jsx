@@ -1,97 +1,103 @@
-import Grid from "@mui/material/Grid";
-import { Divider } from "@mui/material";
+import React from "react";
+import { Box, Divider } from "@mui/material";
 import FooterContactMenu from "./FooterContactMenu";
 import FooterSideMenues from "./FooterSideMenues";
 import FooterBottomLine from "./FooterBottomLine";
 import ResponsiveContainer from "../ResponsiveContainer";
 
-const menu = [
-  ["اموزش نحوه استفاده", `\\howto`],
-  ["حریم خصوصی", `\\privacy&rules\\#privacy`],
-  ["قوانین و شرایط", `\\privacy&rules\\#rules`],
+const BOTTOM_MENU = [
+  ["اموزش نحوه استفاده", "/howto"],
+  ["حریم خصوصی", "/privacy&rules#privacy"],
+  ["قوانین و شرایط", "/privacy&rules#rules"],
 ];
 
 export default function Footer() {
-  const footerStyle = {
-    width: "100%",
-    backgroundColor: "var(--footerBG)",
-    px: {
-      xs: "30px",
-      lgp: 0,
-    },
-    py: {
-      xs: "50px",
-      sm: "70px",
-    },
-    direction: "rtl",
-    color: "var(--secondary-text)",
-    "*": {
-      color: "var(--secondary-text)",
-    },
-    " li": {
-      transition: "color 250ms ease-in-out",
-      display: "flex",
-      alignItems: "center",
-      listStyle: "none",
-      my: "20px",
-    },
-    " a": {
-      position: "relative",
-      "&::before": {
-        transition: "background-color 250ms ease-in-out",
-        content: `" "`,
-        width: "5px",
-        height: "5px",
-        borderRadius: "50%",
-        backgroundColor: "none",
-        position: "absolute",
-        margin: "auto",
-        top: "0",
-        bottom: "0",
-        right: "-12.5px",
-      },
-      ":hover": {
-        color: "var(--activeText)",
-        "&::before": {
-          backgroundColor: "var(--notActiveBG)",
-        },
-      },
-    },
-  };
-
-  const footerContainerstyles = {
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: "90%",
-    gap: "50px",
-  };
-
   return (
-    <Grid container component="footer" sx={footerStyle}>
+    <Box
+      component="footer"
+      id="site-footer"
+      sx={{
+        width: "100%",
+        backgroundColor: "var(--footerBG)",
+        direction: "rtl",
+        py: {
+          xs: "40px",
+          sm: "60px",
+          md: "70px",
+        },
+        px: {
+          xs: "16px",
+          sm: "32px",
+          md: "48px",
+          lg: 0,
+        },
+        color: "var(--secondary-text)",
+        " a.footer-nav-link": {
+          position: "relative",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            width: "5px",
+            height: "5px",
+            borderRadius: "50%",
+            backgroundColor: "transparent",
+            right: "-12px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            transition: "background-color 0.2s ease",
+          },
+          "&:hover": {
+            color: "var(--activeText)",
+            "&::before": {
+              backgroundColor: "var(--activeText)",
+            },
+          },
+        },
+      }}
+    >
       <ResponsiveContainer
-        maxWidth="lg"
+        maxWidth={1140}
         disableGutters
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: {
-            xs: "50px",
-            sm: "90px",
+            xs: "32px",
+            sm: "60px",
+            md: "70px",
+            lg: "80px",
           },
         }}
       >
-        <Grid xs={12} container sx={footerContainerstyles}>
+        {/* Main upper content row: Contact info on right, Nav menus on left */}
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            alignItems: { xs: "stretch", sm: "flex-start" },
+            gap: { xs: "48px", sm: "32px", md: "48px" },
+          }}
+        >
           <FooterContactMenu />
-          <FooterSideMenues menu={menu} />
-        </Grid>
+          <FooterSideMenues menu={BOTTOM_MENU} />
+        </Box>
+
+        {/* Subtle horizontal divider on mobile matching Figma 5:9683 */}
         <Divider
           component="hr"
-          orientation="horizontal"
-          sx={{ backgroundColor: "#fff", display: { xs: "block", sm: "none" } }}
-          flexItem
+          sx={{
+            display: { xs: "block", sm: "none" },
+            borderColor: "rgba(125, 125, 125, 0.35)",
+            my: 0,
+          }}
         />
-        <FooterBottomLine menu={menu} />
+
+        {/* Bottom bar: Copyright + Desktop legal links */}
+        <FooterBottomLine menu={BOTTOM_MENU} />
       </ResponsiveContainer>
-    </Grid>
+    </Box>
   );
 }
+
