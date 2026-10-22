@@ -15,12 +15,12 @@ const IconWithText = ({
   const containerStyle = {
     display: "flex",
     alignItems: "center",
+    gap: "8px",
     cursor: link ? "pointer" : "",
     transition: "all 0.3s ease",
   };
 
   const textStyle = {
-    marginLeft: "8px",
     color: !hoverable
       ? baseColor
       : isHovered

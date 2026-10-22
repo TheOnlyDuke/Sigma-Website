@@ -4,11 +4,26 @@ import IconWithText from "@/components/IconWithText";
 export default function DownloadFeaturesList() {
   return (
     <Box
+      component="ul"
       sx={{
-        my: "50px",
+        my: { xs: "32px", sm: "40px", md: "48px" },
+        p: 0,
+        m: 0,
+        listStyle: "none",
         display: "flex",
         flexDirection: "column",
-        gap: "20px",
+        gap: { xs: "16px", sm: "20px" },
+        "@media (min-width: 2560px)": {
+          my: "56px",
+          gap: "26px",
+          "& .MuiTypography-root": {
+            fontSize: "22px",
+          },
+          "& .icon": {
+            width: "28px",
+            height: "28px",
+          },
+        },
       }}
     >
       <IconWithText
