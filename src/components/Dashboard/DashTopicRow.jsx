@@ -1,6 +1,7 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
+import SoonStampBadge from "@/components/mainPage/Download/SoonStampBadge";
 
 const StartArrowSvg = ({ color = "#969696" }) => (
   <svg width="19" height="11" viewBox="0 0 19 11" fill="none">
@@ -12,25 +13,26 @@ const StartArrowSvg = ({ color = "#969696" }) => (
 );
 
 export function DashTopicDesktopRow({ topic }) {
-  return (
-    <Link
-      href="/topics"
-      style={{ textDecoration: "none", color: "inherit" }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-          height: "110px",
-          bgcolor: "background.paper",
-          borderRadius: "20px",
-          border: "1px solid var(--border)",
-          px: "50px",
-          boxSizing: "border-box",
-          cursor: "pointer",
-          transition: "all 0.25s ease",
-          direction: "rtl",
+  const isAvailable = topic.isAvailable !== false;
+  const href = `/questions/${topic.slug || topic.id}`;
+
+  const rowContent = (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        width: "100%",
+        height: "110px",
+        bgcolor: "background.paper",
+        borderRadius: "20px",
+        border: "1px solid var(--border)",
+        px: "50px",
+        boxSizing: "border-box",
+        cursor: isAvailable ? "pointer" : "default",
+        transition: "all 0.25s ease",
+        direction: "rtl",
+        opacity: isAvailable ? 1 : 0.9,
+        ...(isAvailable && {
           "&:hover": {
             borderColor: "var(--activeBG)",
             transform: "translateY(-2px)",
@@ -39,120 +41,149 @@ export function DashTopicDesktopRow({ topic }) {
               fill: "var(--activeBG)",
             },
           },
+        }),
+      }}
+    >
+      <Typography
+        sx={{
+          width: "26%",
+          textAlign: "right",
+          fontSize: { md: "24px", lg: "28px" },
+          fontWeight: 900,
+          fontFamily: "inherit",
+          color: "var(--primary-text)",
+          pr: 1,
         }}
       >
-        <Typography
-          sx={{
-            width: "26%",
-            textAlign: "right",
-            fontSize: { md: "24px", lg: "28px" },
-            fontWeight: 900,
-            fontFamily: "inherit",
-            color: "var(--primary-text)",
-            pr: 1,
-          }}
-        >
-          {topic.name}
-        </Typography>
-        <Typography
-          sx={{
-            width: "22%",
-            textAlign: "center",
-            fontSize: "16px",
-            fontWeight: 500,
-            fontFamily: "inherit",
-            color: "var(--primary-text)",
-          }}
-        >
-          {topic.score} امتیاز
-        </Typography>
-        <Typography
-          sx={{
-            width: "22%",
-            textAlign: "center",
-            fontSize: "16px",
-            fontWeight: 500,
-            fontFamily: "inherit",
-            color: "var(--primary-text)",
-          }}
-        >
-          {topic.solvedQuestions} سوال
-        </Typography>
-        <Typography
-          sx={{
-            width: "18%",
-            textAlign: "center",
-            fontSize: "16px",
-            fontWeight: 500,
-            fontFamily: "inherit",
-            color: "var(--primary-text)",
-          }}
-        >
-          {topic.totalQuestions} سوال
-        </Typography>
-        <Box
-          sx={{
-            width: "12%",
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            pl: 1,
-          }}
-        >
+        {topic.name}
+      </Typography>
+      <Typography
+        sx={{
+          width: "22%",
+          textAlign: "center",
+          fontSize: "16px",
+          fontWeight: 500,
+          fontFamily: "inherit",
+          color: "var(--primary-text)",
+        }}
+      >
+        {topic.score} امتیاز
+      </Typography>
+      <Typography
+        sx={{
+          width: "22%",
+          textAlign: "center",
+          fontSize: "16px",
+          fontWeight: 500,
+          fontFamily: "inherit",
+          color: "var(--primary-text)",
+        }}
+      >
+        {topic.solvedQuestions} سوال
+      </Typography>
+      <Typography
+        sx={{
+          width: "18%",
+          textAlign: "center",
+          fontSize: "16px",
+          fontWeight: 500,
+          fontFamily: "inherit",
+          color: "var(--primary-text)",
+        }}
+      >
+        {topic.totalQuestions} سوال
+      </Typography>
+      <Box
+        sx={{
+          width: "12%",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          pl: 1,
+        }}
+      >
+        {isAvailable ? (
           <Box className="start-arrow" sx={{ transition: "all 0.2s ease" }}>
             <StartArrowSvg />
           </Box>
-        </Box>
+        ) : (
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <SoonStampBadge sx={{ fontSize: "12px", py: "2px", px: "8px" }} />
+          </Box>
+        )}
       </Box>
-    </Link>
+    </Box>
   );
+
+  if (isAvailable) {
+    return (
+      <Link href={href} style={{ textDecoration: "none", color: "inherit" }}>
+        {rowContent}
+      </Link>
+    );
+  }
+
+  return rowContent;
 }
 
 export function DashTopicMobileRow({ topic }) {
-  return (
-    <Link
-      href="/topics"
-      style={{ textDecoration: "none", color: "inherit" }}
+  const isAvailable = topic.isAvailable !== false;
+  const href = `/questions/${topic.slug || topic.id}`;
+
+  const rowContent = (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        py: 1.5,
+        cursor: isAvailable ? "pointer" : "default",
+        direction: "rtl",
+        opacity: isAvailable ? 1 : 0.9,
+      }}
     >
-      <Box
+      <Typography
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          py: 1.5,
-          cursor: "pointer",
-          direction: "rtl",
+          fontSize: "18px",
+          fontWeight: 900,
+          fontFamily: "inherit",
+          color: "var(--primary-text)",
+          minWidth: "70px",
+          textAlign: "right",
         }}
       >
-        <Typography
-          sx={{
-            fontSize: "18px",
-            fontWeight: 900,
-            fontFamily: "inherit",
-            color: "var(--primary-text)",
-            minWidth: "70px",
-            textAlign: "right",
-          }}
-        >
-          {topic.name}
-        </Typography>
+        {topic.name}
+      </Typography>
 
-        <Typography
-          sx={{
-            fontSize: "16px",
-            fontWeight: 500,
-            fontFamily: "inherit",
-            color: "var(--primary-text)",
-            textAlign: "center",
-          }}
-        >
-          {topic.solvedQuestions}/{topic.totalQuestions}
-        </Typography>
+      <Typography
+        sx={{
+          fontSize: "16px",
+          fontWeight: 500,
+          fontFamily: "inherit",
+          color: "var(--primary-text)",
+          textAlign: "center",
+        }}
+      >
+        {topic.solvedQuestions}/{topic.totalQuestions}
+      </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        {isAvailable ? (
           <StartArrowSvg />
-        </Box>
+        ) : (
+          <SoonStampBadge sx={{ fontSize: "11px", py: "1px", px: "6px" }} />
+        )}
       </Box>
-    </Link>
+    </Box>
   );
+
+  if (isAvailable) {
+    return (
+      <Link href={href} style={{ textDecoration: "none", color: "inherit" }}>
+        {rowContent}
+      </Link>
+    );
+  }
+
+  return rowContent;
 }

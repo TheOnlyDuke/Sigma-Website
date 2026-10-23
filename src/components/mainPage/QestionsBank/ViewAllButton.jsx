@@ -16,7 +16,7 @@ export default function ViewAllButton() {
         zIndex: 999,
       }}
       onClick={() => {
-        router.push("/questions");
+        router.push("/dashboard#topics");
       }}
     >
       مشاهده همه سوالات

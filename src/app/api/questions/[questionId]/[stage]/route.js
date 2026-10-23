@@ -1,34 +1,5 @@
 import { NextResponse } from "next/server";
-
-// export async function GET(request, { params }) {
-//   try {
-//     const { questionId, stage } = params;
-
-//     const response = await fetch(
-//       `${process.env.NEXT_PRIVATE_BACKEND_BASE_URL}/question-web/${questionId}/${stage}/`,
-//       {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//           "X-Requested-With": "XMLHttpRequest",
-//         },
-//         cache: "no-store",
-//       }
-//     );
-
-//     if (!response.ok) {
-//       throw new Error(`Failed to fetch stage data: ${response.status}`);
-//     }
-
-//     const data = await response.json();
-//     return NextResponse.json(data);
-//   } catch (error) {
-//     return NextResponse.json(
-//       { error: error.message || "Failed to fetch question stage" },
-//       { status: 500 }
-//     );
-//   }
-// }
+import { evaluateAnswer } from "@/utils/dummydatas";
 
 export async function POST(request, context) {
   try {
@@ -40,24 +11,38 @@ export async function POST(request, context) {
       throw new Error("Answer option is required");
     }
 
-    const response = await fetch(
-      `${process.env.NEXT_PRIVATE_BACKEND_BASE_URL}/question-web/${questionId}/${stage}/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        body: JSON.stringify({ answer: body.answer }),
-      }
-    );
+    if (process.env.NEXT_PRIVATE_BACKEND_BASE_URL) {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PRIVATE_BACKEND_BASE_URL}/question-web/${questionId}/${stage}/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Requested-With": "XMLHttpRequest",
+            },
+            body: JSON.stringify({ answer: body.answer }),
+          }
+        );
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || "Answer submission failed");
+        if (response.ok) {
+          const data = await response.json();
+          return NextResponse.json(data);
+        }
+      } catch (e) {
+        // Fall back to local mock evaluation
+      }
     }
 
-    return NextResponse.json(data);
+    const result = evaluateAnswer(questionId, Number(stage), Number(body.answer));
+    if (result) {
+      return NextResponse.json(result);
+    }
+
+    return NextResponse.json(
+      { error: "Question or stage not found" },
+      { status: 404 }
+    );
   } catch (error) {
     return NextResponse.json(
       { error: error.message || "Failed to submit answer" },
@@ -65,3 +50,4 @@ export async function POST(request, context) {
     );
   }
 }
+

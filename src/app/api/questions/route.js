@@ -1,33 +1,34 @@
 import { NextResponse } from "next/server";
+import { getQuestionsByTopic } from "@/utils/dummydatas";
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const topic = searchParams.get("topic");
+
   try {
-    if (!process.env.NEXT_PRIVATE_BACKEND_BASE_URL) {
-      throw new Error("Backend configuration missing");
-    }
+    if (process.env.NEXT_PRIVATE_BACKEND_BASE_URL) {
+      const response = await fetch(
+        `${process.env.NEXT_PRIVATE_BACKEND_BASE_URL}/question-web/`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          cache: "no-store",
+        }
+      );
 
-    const response = await fetch(
-      `${process.env.NEXT_PRIVATE_BACKEND_BASE_URL}/question-web/`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        cache: "no-store",
+      if (response.ok) {
+        const data = await response.json();
+        return NextResponse.json(data);
       }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Backend error: ${response.status}`);
     }
-
-    const data = await response.json();
-    return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch questions" },
-      { status: 500 }
-    );
+    // Fall back to local mock data
   }
+
+  const fallbackData = getQuestionsByTopic(topic);
+  return NextResponse.json(fallbackData);
 }
+

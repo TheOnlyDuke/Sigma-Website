@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { learningTopics } from "@/utils/dummydatas";
+import { learningTopics, questionsTopics } from "@/utils/dummydatas";
 
 /**
  * Creates a route validator and resolver for dynamic routes restricted to predefined items.
@@ -78,16 +78,20 @@ export function createRouteValidator({
   };
 }
 
-
 export const topicRouteValidator = createRouteValidator({
   items: Object.values(learningTopics || {}),
   slugKey: "slug",
   aliasKeys: ["aliases", "title", "titleEn", "name", "id"],
 });
 
-
 export const blogRouteValidator = createRouteValidator({
   items: [],
   slugKey: "slug",
   aliasKeys: ["aliases", "title", "id"],
+});
+
+export const questionsRouteValidator = createRouteValidator({
+  items: questionsTopics,
+  slugKey: "slug",
+  aliasKeys: ["aliases", "title", "titleEn", "name", "id"],
 });

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export const config = {
-  matcher: "/dashboard/:path*",
+  matcher: ["/dashboard/:path*", "/questions/:path*"],
 };
 
 export function proxy(request) {
@@ -14,10 +14,11 @@ export function proxy(request) {
 
   // Production: Check for access token cookie
   const accessToken = request.cookies.get("access_token");
+  const pathname = request.nextUrl.pathname;
 
   if (
     !accessToken?.value &&
-    request.nextUrl.pathname.startsWith("/dashboard")
+    (pathname.startsWith("/dashboard") || pathname.startsWith("/questions"))
   ) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }

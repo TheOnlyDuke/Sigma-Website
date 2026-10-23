@@ -19,7 +19,7 @@ export default function HeroSection() {
             مجموعه سیگما با استفاده از جدید‌ترین متد ها مباحث غیر قابل فهم ریاضی
             را در حین بازی کردن و حل مثال به شما آموزش می‌دهد.
           </Typography>
-          <Link href="/questions">
+          <Link href="/dashboard#topics">
             <Button variant="contained" sx={heroStyles.button}>
               آموزش رو شروع كنيد
             </Button>

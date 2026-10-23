@@ -558,6 +558,8 @@ export const dashboardTopics = [
   {
     id: 1,
     name: "انتگرال",
+    slug: "integral",
+    isAvailable: true,
     score: 145,
     totalQuestions: 250,
     solvedQuestions: 100,
@@ -565,6 +567,8 @@ export const dashboardTopics = [
   {
     id: 2,
     name: "مشتق",
+    slug: "derivative",
+    isAvailable: true,
     score: 125,
     totalQuestions: 250,
     solvedQuestions: 120,
@@ -572,6 +576,8 @@ export const dashboardTopics = [
   {
     id: 3,
     name: "حد و پیوستگی",
+    slug: "limits",
+    isAvailable: false,
     score: 98,
     totalQuestions: 180,
     solvedQuestions: 85,
@@ -579,6 +585,8 @@ export const dashboardTopics = [
   {
     id: 4,
     name: "ماتریکس",
+    slug: "matrices",
+    isAvailable: false,
     score: 114,
     totalQuestions: 200,
     solvedQuestions: 95,
@@ -658,3 +666,389 @@ export const topicsTableHeaders = [
   "کل سوالات",
   "شروع",
 ];
+
+// ── Questions Section Data Layer ──────────────────────────────────────
+export const questionsTopics = [
+  {
+    id: "integral",
+    slug: "integral",
+    title: "انتگرال",
+    titleEn: "Integral",
+    aliases: ["integral", "انتگرال"],
+  },
+  {
+    id: "derivative",
+    slug: "derivative",
+    title: "مشتق",
+    titleEn: "Derivative",
+    aliases: ["derivative", "مشتق"],
+  },
+];
+
+export const topicQuestionsData = {
+  integral: [
+    {
+      id: "integral-1",
+      topic: "integral",
+      title: "انتگرال توابع چندجمله‌ای",
+      question_latex: "\\int (3x^2 + 4x - 5) \\, dx",
+      description: "گام ۱: با استفاده از قاعده توان، پادمشتق هر جمله را جداگانه به دست آورید.",
+      stages: [
+        {
+          stage: 1,
+          correct_option: 1,
+          option1_latex: "3 \\cdot \\frac{x^3}{3} + 4 \\cdot \\frac{x^2}{2} - 5x + C",
+          option1_description: "کاملاً درست است! توان هر متغیر یک واحد افزایش یافته و بر توان جدید تقسیم می‌شود.",
+          option2_latex: "3(2x) + 4 - 0",
+          option2_description: "اشتباه: شما مشتق تابع را محاسبه کردید نه انتگرال آن.",
+          option3_latex: "\\frac{x^3}{3} + \\frac{x^2}{2} - 5x",
+          option3_description: "اشتباه: ضرایب ۳ و ۴ اعمال نشده‌اند و ثابت C فراموش شده است.",
+          option4_latex: "x^3 + 4x^2 - 5x + C",
+          option4_description: "اشتباه: ضریب جمله دوم بر توان جدید تقسیم نشده است.",
+        },
+        {
+          stage: 2,
+          correct_option: 2,
+          option1_latex: "3x^3 + 2x^2 - 5x + C",
+          option1_description: "اشتباه: ضرایب صورت و مخرج ۳/۳ باید با هم ساده شوند.",
+          option2_latex: "x^3 + 2x^2 - 5x + C",
+          option2_description: "پاسخ نهایی دقیق و کاملاً ساده‌شده است! آفرین.",
+          option3_latex: "x^3 + 4x^2 - 5x + C",
+          option3_description: "اشتباه: ۴ تقسیم بر ۲ برابر ۲ می‌شود نه ۴.",
+          option4_latex: "x^3 + 2x^2 - 5 + C",
+          option4_description: "اشتباه: متغیر x از جمله آخر به اشتباه حذف شده است.",
+        },
+      ],
+    },
+    {
+      id: "integral-2",
+      topic: "integral",
+      title: "انتگرال به روش تغییر متغیر (جانشانی)",
+      question_latex: "\\int 2x e^{x^2} \\, dx",
+      description: "گام ۱: متغیر کمکی u مناسب را برای ساده‌سازی عبارت توان انتخاب کنید.",
+      stages: [
+        {
+          stage: 1,
+          correct_option: 3,
+          option1_latex: "u = 2x \\implies du = 2 \\, dx",
+          option1_description: "اشتباه: با این انتخاب، توان تابع نمایی ساده نمی‌شود.",
+          option2_latex: "u = e^{x^2} \\implies du = 2x e^{x^2} \\, dx",
+          option2_description: "اشتباه: این جانشانی مسئله را به فرم استاندارد ساده نمی‌کند.",
+          option3_latex: "u = x^2 \\implies du = 2x \\, dx",
+          option3_description: "عالی! با این انتخاب عبارت 2x dx مستقیماً به du تبدیل می‌شود.",
+          option4_latex: "u = e^x \\implies du = e^x \\, dx",
+          option4_description: "اشتباه: در صورت مسئله توان x^2 داریم نه x.",
+        },
+        {
+          stage: 2,
+          correct_option: 1,
+          option1_latex: "\\int e^u \\, du = e^u + C",
+          option1_description: "درست است! انتگرال تابع نمایی e^u برابر خود e^u است.",
+          option2_latex: "\\int u \\, du = \\frac{u^2}{2} + C",
+          option2_description: "اشتباه: تابع نمایی به u تبدیل نمی‌شود، بلکه به e^u تبدیل می‌شود.",
+          option3_latex: "2 \\int e^u \\, du = 2e^u + C",
+          option3_description: "اشتباه: ضریب ۲ در دیفرانسیل du جذب شده و نباید بیرون بماند.",
+          option4_latex: "e^u",
+          option4_description: "اشتباه: ثابت اختیاری انتگرال (+ C) نباید فراموش شود.",
+        },
+        {
+          stage: 3,
+          correct_option: 4,
+          option1_latex: "e^{2x} + C",
+          option1_description: "اشتباه: مقدار u برابر x^2 بود نه 2x.",
+          option2_latex: "2x e^{x^2} + C",
+          option2_description: "اشتباه: متغیر x نباید به عنوان ضریب بازگردد.",
+          option3_latex: "e^u + C",
+          option3_description: "اشتباه: در پاسخ نهایی باید متغیر اصلی x جایگزین شود.",
+          option4_latex: "e^{x^2} + C",
+          option4_description: "فوق‌العاده! پاسخ نهایی کاملاً صحیح و استاندارد است.",
+        },
+      ],
+    },
+    {
+      id: "integral-3",
+      topic: "integral",
+      title: "انتگرال توابع مثلثاتی",
+      question_latex: "\\int \\sin(x) \\cos(x) \\, dx",
+      description: "گام ۱: با استفاده از اتحاد زاویه دوبرابر سینوس، عبارت را ساده کنید.",
+      stages: [
+        {
+          stage: 1,
+          correct_option: 2,
+          option1_latex: "\\int \\sin(2x) \\, dx",
+          option1_description: "اشتباه: ضریب ۱/۲ فراموش شده است؛ چون sin(2x) = 2 sin(x) cos(x).",
+          option2_latex: "\\frac{1}{2} \\int \\sin(2x) \\, dx",
+          option2_description: "دقیقاً درست است! sin(x) cos(x) برابر یک‌دوم sin(2x) است.",
+          option3_latex: "\\int (\\cos^2(x) - \\sin^2(x)) \\, dx",
+          option3_description: "اشتباه: این اتحاد مربوط به cos(2x) است نه حاصل‌ضرب sin و cos.",
+          option4_latex: "2 \\int \\sin(2x) \\, dx",
+          option4_description: "اشتباه: ضریب باید ۱/۲ باشد نه ۲.",
+        },
+        {
+          stage: 2,
+          correct_option: 1,
+          option1_latex: "-\\frac{1}{4} \\cos(2x) + C",
+          option1_description: "احسنت! انتگرال sin(2x) برابر -1/2 cos(2x) است که در 1/2 ضرب می‌شود.",
+          option2_latex: "\\frac{1}{4} \\cos(2x) + C",
+          option2_description: "اشتباه در علامت: انتگرال سینوس منفی است.",
+          option3_latex: "-\\frac{1}{2} \\cos(2x) + C",
+          option3_description: "اشتباه: ضریب ۲ داخل آرگومان باید به عنوان ۱/۲ مخرج اعمال شود.",
+          option4_latex: "-\\frac{1}{4} \\sin(2x) + C",
+          option4_description: "اشتباه: پادمشتق سینوس، تابع کسینوس است نه سینوس.",
+        },
+      ],
+    },
+    {
+      id: "integral-4",
+      topic: "integral",
+      title: "انتگرال توابع کسری و لگاریتمی",
+      question_latex: "\\int \\frac{1}{2x + 1} \\, dx",
+      description: "گام ۱: جانشانی خطی u = 2x + 1 را اعمال کرده و دیفرانسیل را بیابید.",
+      stages: [
+        {
+          stage: 1,
+          correct_option: 3,
+          option1_latex: "\\int \\frac{1}{u} \\, du",
+          option1_description: "اشتباه: du = 2 dx است، پس dx = (1/2) du خواهد بود.",
+          option2_latex: "2 \\int \\frac{1}{u} \\, du",
+          option2_description: "اشتباه: ضریب ۲ باید در مخرج باشد نه صورت.",
+          option3_latex: "\\frac{1}{2} \\int \\frac{1}{u} \\, du",
+          option3_description: "درست است! با دیفرانسیل du = 2 dx، ضریب یک‌دوم بیرون می‌آید.",
+          option4_latex: "\\int u \\, du",
+          option4_description: "اشتباه: عبارت در مخرج قرار دارد نه صورت.",
+        },
+        {
+          stage: 2,
+          correct_option: 1,
+          option1_latex: "\\frac{1}{2} \\ln|2x + 1| + C",
+          option1_description: "پاسخ کامل و بی‌نقص! قدرمطلق و ثابت C نیز لحاظ شده‌اند.",
+          option2_latex: "\\ln|2x + 1| + C",
+          option2_description: "اشتباه: ضریب ۱/۲ بیرون انتگرال اعمال نشده است.",
+          option3_latex: "\\frac{1}{2(2x+1)^2} + C",
+          option3_description: "اشتباه: انتگرال 1/u لگاریتم طبیعی است، نه توان منفی.",
+          option4_latex: "\\frac{1}{2} \\ln(2x + 1)",
+          option4_description: "اشتباه: ثابت اختیاری C و قدرمطلق دامنه را فراموش کرده‌اید.",
+        },
+      ],
+    },
+  ],
+  derivative: [
+    {
+      id: "derivative-1",
+      topic: "derivative",
+      title: "مشتق توابع چندجمله‌ای",
+      question_latex: "f(x) = 4x^3 - 5x^2 + 7x - 9 \\implies f'(x) = ?",
+      description: "گام ۱: قاعده توان مشتق را بر تک‌تک جملات چندجمله‌ای اعمال کنید.",
+      stages: [
+        {
+          stage: 1,
+          correct_option: 1,
+          option1_latex: "4(3x^2) - 5(2x) + 7(1) - 0",
+          option1_description: "کاملاً درست است! توان‌ها کاهش یافته و مشتق عدد ثابت صفر است.",
+          option2_latex: "4(x^4/4) - 5(x^3/3) + 7(x^2/2) - 9x",
+          option2_description: "اشتباه: این انتگرال تابع است، نه مشتق آن!",
+          option3_latex: "12x^3 - 10x^2 + 7x",
+          option3_description: "اشتباه: در مشتق‌گیری توان‌ها باید یک واحد کم شوند.",
+          option4_latex: "4(3x^2) - 5(2x) + 7 - 9",
+          option4_description: "اشتباه: مشتق عدد ثابت ۹ برابر صفر است نه ۹.",
+        },
+        {
+          stage: 2,
+          correct_option: 3,
+          option1_latex: "12x^2 - 10x + 7 - 9",
+          option1_description: "اشتباه: عدد ثابت -9 مشتقش صفر است و نباید نوشته شود.",
+          option2_latex: "12x^3 - 10x + 7",
+          option2_description: "اشتباه: توان جمله اول باید ۲ باشد (3 - 1 = 2).",
+          option3_latex: "12x^2 - 10x + 7",
+          option3_description: "عالی! محاسبات جبری دقیق و نتیجه نهایی کاملاً درست است.",
+          option4_latex: "7x^2 - 10x + 12",
+          option4_description: "اشتباه: ضرایب جابجا شده‌اند.",
+        },
+      ],
+    },
+    {
+      id: "derivative-2",
+      topic: "derivative",
+      title: "مشتق ضرب دو تابع",
+      question_latex: "f(x) = x^2 \\sin(x) \\implies f'(x) = ?",
+      description: "گام ۱: از قاعده ضرب (uv)' = u'v + uv' استفاده کنید.",
+      stages: [
+        {
+          stage: 1,
+          correct_option: 4,
+          option1_latex: "(x^2)' \\cdot (\\sin(x))'",
+          option1_description: "اشتباه: مشتق ضرب برابر ضرب مشتق‌ها نیست!",
+          option2_latex: "(x^2)' \\sin(x) - x^2 (\\sin(x))'",
+          option2_description: "اشتباه: در قاعده ضرب، بین دو عبارت علامت مثبت (+) قرار می‌گیرد.",
+          option3_latex: "2x \\sin(x)",
+          option3_description: "اشتباه: مشتق جمله دوم (sin x) نادیده گرفته شده است.",
+          option4_latex: "(x^2)' \\sin(x) + x^2 (\\sin(x))'",
+          option4_description: "آفرین! بسط استاندارد قاعده ضرب به درستی نوشته شد.",
+        },
+        {
+          stage: 2,
+          correct_option: 2,
+          option1_latex: "2x \\sin(x) - x^2 \\cos(x)",
+          option1_description: "اشتباه در علامت: مشتق سینوس مثبت کسینوس است.",
+          option2_latex: "2x \\sin(x) + x^2 \\cos(x)",
+          option2_description: "فوق‌العاده! مشتق x^2 برابر 2x و مشتق sin(x) برابر cos(x) است.",
+          option3_latex: "2x \\cos(x) + x^2 \\sin(x)",
+          option3_description: "اشتباه: مشتق‌ها جابجا اعمال شده‌اند.",
+          option4_latex: "x^2 \\cos(x)",
+          option4_description: "اشتباه: جمله اول (2x sin(x)) حذف شده است.",
+        },
+      ],
+    },
+    {
+      id: "derivative-3",
+      topic: "derivative",
+      title: "مشتق زنجیره‌ای توابع مرکب",
+      question_latex: "f(x) = (3x^2 + 1)^4 \\implies f'(x) = ?",
+      description: "گام ۱: قاعده زنجیره‌ای را با مشتق گرفتن از لایه بیرونی آغاز کنید.",
+      stages: [
+        {
+          stage: 1,
+          correct_option: 1,
+          option1_latex: "4(3x^2 + 1)^3 \\cdot \\frac{d}{dx}(3x^2 + 1)",
+          option1_description: "کاملاً درست! مشتق لایه بیرونی ضربدر مشتق داخل پرانتز.",
+          option2_latex: "4(3x^2 + 1)^3",
+          option2_description: "اشتباه: مشتق عبارت درونی (قاعده زنجیره‌ای) فراموش شده است.",
+          option3_latex: "4(6x)^3",
+          option3_description: "اشتباه: نمی‌توان قبل از مشتق بیرونی، داخل را مشتق گرفت.",
+          option4_latex: "(6x)^4",
+          option4_description: "اشتباه: توان ۴ متعلق به کل عبارت است.",
+        },
+        {
+          stage: 2,
+          correct_option: 3,
+          option1_latex: "4(3x^2 + 1)^3 \\cdot (6x + 1)",
+          option1_description: "اشتباه: مشتق عدد ثابت ۱ برابر صفر است نه ۱.",
+          option2_latex: "12x(3x^2 + 1)^3",
+          option2_description: "اشتباه در ضریب: ۴ ضربدر ۶ برابر ۲۴ می‌شود نه ۱۲.",
+          option3_latex: "24x(3x^2 + 1)^3",
+          option3_description: "پاسخ نهایی دقیق و کاملاً صحیح است: ۴ × ۶x = ۲۴x.",
+          option4_latex: "24x^2(3x^2 + 1)^3",
+          option4_description: "اشتباه: توان x در ۶x برابر ۱ است نه ۲.",
+        },
+      ],
+    },
+    {
+      id: "derivative-4",
+      topic: "derivative",
+      title: "مشتق خارج قسمت دو تابع (کسری)",
+      question_latex: "f(x) = \\frac{\\ln(x)}{x} \\implies f'(x) = ?",
+      description: "گام ۱: از فرمول خارج قسمت (u/v)' = (u'v - uv') / v^2 استفاده کنید.",
+      stages: [
+        {
+          stage: 1,
+          correct_option: 2,
+          option1_latex: "\\frac{(\\ln(x))'}{x'}",
+          option1_description: "اشتباه: مشتق کسر برابر مشتق صورت تقسیم بر مشتق مخرج نیست!",
+          option2_latex: "\\frac{(\\ln(x))' \\cdot x - \\ln(x) \\cdot (x)'}{x^2}",
+          option2_description: "بسیار عالی! ساختار قاعده خارج قسمت با دقت نوشته شد.",
+          option3_latex: "\\frac{(\\ln(x))' \\cdot x + \\ln(x) \\cdot (x)'}{x^2}",
+          option3_description: "اشتباه در علامت: در صورت کسر علامت منفی (-) قرار می‌گیرد.",
+          option4_latex: "\\frac{x \\cdot (x)' - \\ln(x) \\cdot (\\ln(x))'}{x^2}",
+          option4_description: "اشتباه: ترتیب جملات صورت کسر نادرست است.",
+        },
+        {
+          stage: 2,
+          correct_option: 4,
+          option1_latex: "\\frac{x - \\ln(x)}{x^2}",
+          option1_description: "اشتباه: (1/x) ضربدر x برابر ۱ می‌شود نه x.",
+          option2_latex: "\\frac{1 - x\\ln(x)}{x^2}",
+          option2_description: "اشتباه: مشتق x برابر ۱ است، پس ضریب ln(x) برابر ۱ است.",
+          option3_latex: "\\frac{1 + \\ln(x)}{x^2}",
+          option3_description: "اشتباه در علامت: علامت بین جملات صورت منفی است.",
+          option4_latex: "\\frac{1 - \\ln(x)}{x^2}",
+          option4_description: "تبریک! پاسخ کاملاً ساده شده و صحیح است: (1/x)*x - ln(x)*1 = 1 - ln(x).",
+        },
+      ],
+    },
+  ],
+};
+
+/**
+ * Returns all mock questions for a given topic slug.
+ */
+export const getQuestionsByTopic = (topicSlug) => {
+  if (!topicSlug) {
+    return [
+      ...(topicQuestionsData.integral || []),
+      ...(topicQuestionsData.derivative || []),
+    ];
+  }
+  const decoded = decodeURIComponent(topicSlug).trim().toLowerCase();
+  if (decoded === "integral" || decoded === "انتگرال") {
+    return topicQuestionsData.integral || [];
+  }
+  if (decoded === "derivative" || decoded === "مشتق") {
+    return topicQuestionsData.derivative || [];
+  }
+  return [];
+};
+
+/**
+ * Finds a mock question by ID or topic slug (returns first question if topic slug provided).
+ */
+export const getQuestionById = (questionId) => {
+  if (!questionId) return null;
+  const target = decodeURIComponent(String(questionId)).trim().toLowerCase();
+
+  const allQuestions = [
+    ...(topicQuestionsData.integral || []),
+    ...(topicQuestionsData.derivative || []),
+  ];
+
+  // Direct ID match
+  const directMatch = allQuestions.find((q) => q.id.toLowerCase() === target);
+  if (directMatch) return directMatch;
+
+  // Topic match -> return first question of topic
+  if (target === "integral" || target === "انتگرال") {
+    return topicQuestionsData.integral[0] || null;
+  }
+  if (target === "derivative" || target === "مشتق") {
+    return topicQuestionsData.derivative[0] || null;
+  }
+
+  return null;
+};
+
+/**
+ * Evaluates an answer for a specific question stage against the local mock data.
+ */
+export const evaluateAnswer = (questionId, stageNumber, optionNumber) => {
+  const question = getQuestionById(questionId);
+  if (!question || !question.stages) return null;
+
+  const stageIndex = Number(stageNumber) - 1;
+  const currentStage = question.stages[stageIndex];
+  if (!currentStage) return null;
+
+  const isCorrect = Number(optionNumber) === currentStage.correct_option;
+  if (!isCorrect) {
+    const errorDescription =
+      currentStage[`option${optionNumber}_description`] || "پاسخ اشتباه است";
+    return {
+      message: "incorrect",
+      correct: false,
+      error: errorDescription,
+    };
+  }
+
+  const isLastStage = Number(stageNumber) >= question.stages.length;
+  if (isLastStage) {
+    return {
+      message: "final-corect",
+      correct: true,
+      nextStage: null,
+    };
+  }
+
+  return {
+    message: "correct",
+    correct: true,
+    nextStage: Number(stageNumber) + 1,
+  };
+};
