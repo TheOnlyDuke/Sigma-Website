@@ -69,11 +69,19 @@ a {
   cursor: pointer;
 }
 
-.katex * {
+.katex {
   font-family: "Satisfy", cursive !important;
-  font-size: 28px;
   font-weight: 400;
   font-style: normal;
+}
+
+.katex .mathnormal,
+.katex .mathrm,
+.katex .mord,
+.katex .mbin,
+.katex .mrel,
+.katex .mop {
+  font-family: "Satisfy", cursive !important;
 }
 
 .flexRow {

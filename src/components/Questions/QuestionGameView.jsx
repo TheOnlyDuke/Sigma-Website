@@ -1,59 +1,82 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
-import { Box, Typography, Alert, Backdrop, CircularProgress } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { BlockMath } from "react-katex";
-import "katex/dist/katex.min.css";
-import QuestionOptions from "@/components/mainPage/QestionsBank/QestionOptions";
-import QuestionHeader from "./QuestionHeader";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { Box, Typography, Button, CircularProgress } from "@mui/material";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import { motion, AnimatePresence } from "framer-motion";
+import QuestionSidebar from "./QuestionSidebar";
+import QuestionStageProgress from "./QuestionStageProgress";
+import QuestionPromptCard from "./QuestionPromptCard";
+import QuestionOptionsGrid from "./QuestionOptionsGrid";
+import QuestionActionBar from "./QuestionActionBar";
+import QuestionExplanationModal from "./QuestionExplanationModal";
 import QuestionCompletionView from "./QuestionCompletionView";
 import { apiClient } from "@/utils/api";
 import { getQuestionsByTopic } from "@/utils/dummydatas";
 
-const STAGE_TITLES = [
-  "داریم :",
-  "خب خب داری درست پیش میری الان داریم:",
-  "ببینیم چی داری",
-  "بعدی!",
-];
-
-const MixedContent = ({ content }) => {
-  if (!content) return null;
-  const latexStartIndex = content.indexOf("\\");
-  if (latexStartIndex === -1) {
-    return (
-      <Box sx={{ direction: "rtl", whiteSpace: "pre-wrap", mt: 1 }}>
-        <Typography variant="smallTitle">{content}</Typography>
-      </Box>
-    );
-  }
-  const textPart = content.substring(0, latexStartIndex);
-  return (
-    <Box sx={{ direction: "rtl", whiteSpace: "pre-wrap", mt: 1 }}>
-      <Typography variant="smallTitle">{textPart}</Typography>
-    </Box>
-  );
-};
+const toPersianDigits = (num) =>
+  String(num).replace(/[0-9]/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
 
 export default function QuestionGameView({ topic }) {
   const topicSlug = topic?.slug || topic?.id || "integral";
+  const topicTitle = topic?.title || (topicSlug === "derivative" ? "مشتق" : "انتگرال");
+
+  // Core gameplay state
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [stageNumber, setStageNumber] = useState(1);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [questionLatex, setQuestionLatex] = useState("");
-  const [description, setDescription] = useState("");
+  const [stageDescription, setStageDescription] = useState("");
   const [optionTitles, setOptionTitles] = useState(["", "", "", ""]);
   const [optionDescriptions, setOptionDescriptions] = useState(["", "", "", ""]);
+  const [completedQuestions, setCompletedQuestions] = useState(new Set());
+
+  // Feedback and completion state
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isCompleted, setIsCompleted] = useState(false);
   const [isAllFinished, setIsAllFinished] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [showExplanationModal, setShowExplanationModal] = useState(false);
+  const [explanationMessage, setExplanationMessage] = useState("");
   const [error, setError] = useState("");
 
-  const currentQuestion = questions[currentIndex] || null;
+  // Statistics
+  const [correctCount, setCorrectCount] = useState(0);
+  const [wrongCount, setWrongCount] = useState(0);
+  const [startTime, setStartTime] = useState(() => Date.now());
 
-  // Initialize question stage state
+  // Dynamic step indicators from actual question stages (never hardcoded)
+  const currentQuestion = questions[currentIndex] || null;
+  const totalStages = currentQuestion?.stages?.length || 1;
+  const isCurrentQuestionDone = completedQuestions.has(currentIndex);
+
+  // Auto-advance countdown & completion celebration
+  const [countdown, setCountdown] = useState(null);
+  const [showSuccessBanner, setShowSuccessBanner] = useState(false);
+  const timerRef = useRef(null);
+  const timeoutRef = useRef(null);
+
+  // Clear any active countdown or timeout
+  const clearCountdown = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setCountdown(null);
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  // Load question stage data into active display
   const loadStageData = useCallback((question, stageNum) => {
     if (!question || !question.stages) return;
     const stageIdx = stageNum - 1;
@@ -62,7 +85,7 @@ export default function QuestionGameView({ topic }) {
 
     if (stageNum === 1) {
       setQuestionLatex(question.question_latex || "");
-      setDescription(question.description || "");
+      setStageDescription(question.description || "");
     }
 
     setOptionTitles([
@@ -80,13 +103,19 @@ export default function QuestionGameView({ topic }) {
     ]);
   }, []);
 
-  // Fetch questions for topic on mount or topic change
+  // Initialize questions on mount or topic change
   useEffect(() => {
+    clearCountdown();
+    setShowSuccessBanner(false);
     setIsLoading(true);
     setCurrentIndex(0);
     setStageNumber(1);
-    setIsCompleted(false);
+    setSelectedOption(null);
+    setCompletedQuestions(new Set());
     setIsAllFinished(false);
+    setCorrectCount(0);
+    setWrongCount(0);
+    setStartTime(Date.now());
     setError("");
 
     const loadQuestions = async () => {
@@ -104,79 +133,171 @@ export default function QuestionGameView({ topic }) {
     };
 
     loadQuestions();
-  }, [topicSlug, loadStageData]);
+  }, [topicSlug, loadStageData, clearCountdown]);
 
-  const handleSubmit = useCallback(
-    async (option) => {
-      if (!currentQuestion) return;
-      setError("");
-
-      try {
-        const data = await apiClient.submitAnswer(
-          currentQuestion.id,
-          stageNumber,
-          option
-        );
-
-        if (data.message === "final-corect") {
-          setIsCompleted(true);
-          if (currentIndex === questions.length - 1) {
-            setIsAllFinished(true);
-          }
-        } else if (data.message === "correct") {
-          const currentStageIdx = stageNumber - 1;
-          const chosenLatex =
-            currentQuestion.stages[currentStageIdx][`option${option}_latex`] ||
-            "";
-          setQuestionLatex(chosenLatex);
-          const nextStage = stageNumber + 1;
-          setStageNumber(nextStage);
-          setDescription("");
-          loadStageData(currentQuestion, nextStage);
-        } else {
-          const reason =
-            optionDescriptions[option - 1] || data.error || "پاسخ اشتباه است";
-          setAlertMessage(reason);
-          setShowAlert(true);
-        }
-      } catch (err) {
-        const reason =
-          optionDescriptions[option - 1] || "پاسخ نادرست است، مجدداً تلاش کنید";
-        setAlertMessage(reason);
-        setShowAlert(true);
-      }
-    },
-    [
-      currentQuestion,
-      stageNumber,
-      currentIndex,
-      questions.length,
-      optionDescriptions,
-      loadStageData,
-    ]
-  );
-
-  const handleNextQuestion = () => {
+  // Advance to next question cleanly
+  const advanceToNext = useCallback(() => {
+    clearCountdown();
+    setShowSuccessBanner(false);
     if (currentIndex < questions.length - 1) {
       const nextIdx = currentIndex + 1;
       setCurrentIndex(nextIdx);
       setStageNumber(1);
-      setIsCompleted(false);
+      setSelectedOption(null);
       loadStageData(questions[nextIdx], 1);
     } else {
       setIsAllFinished(true);
     }
-  };
+  }, [currentIndex, questions, loadStageData, clearCountdown]);
 
-  const handleRestart = () => {
+  // Cancel automatic advance countdown (keeps score & completed state intact)
+  const handleCancelCountdown = useCallback(() => {
+    clearCountdown();
+  }, [clearCountdown]);
+
+  // Handle stage submission via "گام بعدی" or option click
+  const handleNextStep = useCallback(async () => {
+    if (!currentQuestion || selectedOption === null || isSubmitting) return;
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const data = await apiClient.submitAnswer(
+        currentQuestion.id,
+        stageNumber,
+        selectedOption
+      );
+
+      if (data.message === "final-corect") {
+        setCorrectCount((prev) => prev + 1);
+        setCompletedQuestions((prev) => new Set(prev).add(currentIndex));
+        setSelectedOption(null);
+        setShowSuccessBanner(true);
+
+        // Check if this was the last question in the quiz
+        if (currentIndex === questions.length - 1) {
+          // Final question: celebratory pause, then switch to completion screen
+          timeoutRef.current = setTimeout(() => {
+            setIsAllFinished(true);
+          }, 1200);
+        } else {
+          // Start 3-second countdown before auto-advancing
+          setCountdown(3);
+          let secondsLeft = 3;
+
+          if (timerRef.current) clearInterval(timerRef.current);
+
+          timerRef.current = setInterval(() => {
+            secondsLeft -= 1;
+            if (secondsLeft <= 0) {
+              if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+              }
+              setCountdown(null);
+              setShowSuccessBanner(false);
+
+              // Auto advance
+              setCurrentIndex((curr) => {
+                const nextIdx = curr + 1;
+                if (nextIdx < questions.length) {
+                  setStageNumber(1);
+                  setSelectedOption(null);
+                  loadStageData(questions[nextIdx], 1);
+                  return nextIdx;
+                } else {
+                  setIsAllFinished(true);
+                  return curr;
+                }
+              });
+            } else {
+              setCountdown(secondsLeft);
+            }
+          }, 1000);
+        }
+      } else if (data.message === "correct") {
+        setCorrectCount((prev) => prev + 1);
+        const currentStageIdx = stageNumber - 1;
+        const chosenLatex =
+          currentQuestion.stages[currentStageIdx][`option${selectedOption}_latex`] || "";
+        if (chosenLatex) {
+          setQuestionLatex(chosenLatex);
+        }
+        const nextStage = stageNumber + 1;
+        setStageNumber(nextStage);
+        setSelectedOption(null);
+        setStageDescription("");
+        loadStageData(currentQuestion, nextStage);
+      } else {
+        setWrongCount((prev) => prev + 1);
+        const reason =
+          optionDescriptions[selectedOption - 1] || data.error || "پاسخ اشتباه است";
+        setExplanationMessage(reason);
+        setShowExplanationModal(true);
+      }
+    } catch (err) {
+      setWrongCount((prev) => prev + 1);
+      const reason =
+        optionDescriptions[selectedOption - 1] ||
+        "پاسخ نادرست است، لطفاً مجدداً تلاش کنید";
+      setExplanationMessage(reason);
+      setShowExplanationModal(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [
+    currentQuestion,
+    selectedOption,
+    isSubmitting,
+    stageNumber,
+    currentIndex,
+    questions,
+    optionDescriptions,
+    loadStageData,
+  ]);
+
+  // Handle advancing to next question manually
+  const handleNextQuestion = useCallback(() => {
+    advanceToNext();
+  }, [advanceToNext]);
+
+  // Restart session
+  const handleRestart = useCallback(() => {
+    clearCountdown();
+    setShowSuccessBanner(false);
     setCurrentIndex(0);
     setStageNumber(1);
-    setIsCompleted(false);
+    setSelectedOption(null);
+    setCompletedQuestions(new Set());
     setIsAllFinished(false);
+    setCorrectCount(0);
+    setWrongCount(0);
+    setStartTime(Date.now());
     if (questions.length > 0) {
       loadStageData(questions[0], 1);
     }
-  };
+  }, [questions, loadStageData, clearCountdown]);
+
+  // Switch question from sidebar navigation
+  const handleSelectQuestion = useCallback(
+    (targetIndex) => {
+      if (targetIndex >= 0 && targetIndex < questions.length) {
+        clearCountdown();
+        setShowSuccessBanner(false);
+        setCurrentIndex(targetIndex);
+        setStageNumber(1);
+        setSelectedOption(null);
+        loadStageData(questions[targetIndex], 1);
+      }
+    },
+    [questions, loadStageData, clearCountdown]
+  );
+
+  // Elapsed minutes calculation
+  const elapsedMinutes = useMemo(() => {
+    const diffMs = Date.now() - startTime;
+    return Math.max(Math.round(diffMs / 60000), 1);
+  }, [startTime, isAllFinished]);
 
   if (isLoading) {
     return (
@@ -189,162 +310,249 @@ export default function QuestionGameView({ topic }) {
           width: "100%",
         }}
       >
-        <CircularProgress />
+        <CircularProgress sx={{ color: "var(--activeBG)" }} />
       </Box>
     );
   }
 
+  // Render State B: Game Completed
+  if (isAllFinished) {
+    return (
+      <Box
+        component="main"
+        sx={{
+          flex: 1,
+          width: "100%",
+          maxWidth: "1280px",
+          margin: { xs: "110px auto 40px auto", md: "140px auto 50px auto" },
+          px: { xs: 2, sm: 3 },
+          boxSizing: "border-box",
+        }}
+      >
+        <QuestionCompletionView
+          totalQuestions={questions.length}
+          correctCount={correctCount}
+          wrongCount={wrongCount}
+          score={Math.max(correctCount * 15, 20)}
+          elapsedMinutes={elapsedMinutes}
+          topicTitle={topicTitle}
+          onRestart={handleRestart}
+        />
+      </Box>
+    );
+  }
+
+  // Render State A: Game in Progress (Figma DSK & MB)
   return (
-    <Grid
-      container
-      spacing={3}
+    <Box
       component="main"
       sx={{
         flex: 1,
-        maxWidth: "1200px",
-        margin: "175px auto 40px auto",
         width: "100%",
-        border: "1px solid var(--border)",
-        p: { xs: "20px", sm: "35px" },
-        borderRadius: "20px",
-        bgcolor: "background.paper",
+        maxWidth: "1280px",
+        margin: { xs: "105px auto 40px auto", md: "140px auto 50px auto" },
+        px: { xs: 2, sm: 3 },
         boxSizing: "border-box",
-        direction: "rtl",
       }}
     >
-      {/* Header Bar */}
-      <Grid size={{ xs: 12 }}>
-        <QuestionHeader
-          topicTitle={topic?.title || topicSlug}
-          currentIndex={currentIndex}
-          totalQuestions={questions.length}
-        />
-      </Grid>
-
-      {/* Error Alert Backdrop */}
-      <Backdrop
-        open={showAlert}
-        onClick={() => setShowAlert(false)}
+      <Box
         sx={{
-          color: "#fff",
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          backdropFilter: "blur(3px)",
-          backgroundColor: "rgba(0,0,0,0.5)",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: { xs: 2.5, md: 3.5 },
+          alignItems: { xs: "stretch", md: "flex-start" },
+          direction: "rtl",
         }}
       >
+        {/* Right Column (Sidebar in RTL) */}
+        <QuestionSidebar
+          topicTitle={topicTitle}
+          difficulty="سخت"
+          questionsCount={questions.length}
+          currentIndex={currentIndex}
+          onSelectQuestion={handleSelectQuestion}
+          isQuestionCompleted={(idx) => completedQuestions.has(idx)}
+        />
+
+        {/* Left Column (Main Question Card) */}
         <Box
-          onClick={(e) => e.stopPropagation()}
           sx={{
-            minWidth: 300,
-            maxWidth: "90vw",
-            width: 520,
-            p: 1,
-            direction: "rtl",
+            flex: 1,
+            bgcolor: (theme) =>
+              theme.palette.mode === "dark" ? "#1E1E1E" : "#FFFFFF",
+            border: (theme) =>
+              theme.palette.mode === "dark"
+                ? "1px solid #2F2F2F"
+                : "1px solid #E2E2E2",
+            boxShadow: (theme) =>
+              theme.palette.mode === "dark"
+                ? "0 4px 20px rgba(0,0,0,0.4)"
+                : "0 2px 14px rgba(0, 0, 0, 0.04)",
+            borderRadius: { xs: "20px", sm: "24px" },
+            p: { xs: 2.5, sm: 4, md: 5 },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            boxSizing: "border-box",
+            minHeight: { md: "620px" },
+            justifyContent: "space-between",
           }}
         >
-          <Alert
-            severity="error"
-            onClose={() => setShowAlert(false)}
+          {/* Top Stage Progress Dots */}
+          <QuestionStageProgress
+            totalStages={totalStages}
+            currentStage={stageNumber}
+            sx={{ mb: { xs: 2.5, sm: 3 } }}
+          />
+
+          {/* Question Completion Animation & Auto-Advance Countdown Banner */}
+          <AnimatePresence>
+            {showSuccessBanner && (
+              <motion.div
+                initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                transition={{ duration: 0.25 }}
+                style={{ width: "100%", marginBottom: "18px" }}
+              >
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    bgcolor: "rgba(70, 43, 239, 0.08)",
+                    border: "1.5px solid var(--activeBG, #462BEF)",
+                    borderRadius: "16px",
+                    px: { xs: 2, sm: 2.5 },
+                    py: 1.2,
+                    direction: "rtl",
+                    boxSizing: "border-box",
+                    gap: 1.5,
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                    <CheckCircleRoundedIcon
+                      sx={{
+                        color: "var(--activeBG, #462BEF)",
+                        fontSize: { xs: 24, sm: 28 },
+                      }}
+                    />
+                    <Box sx={{ textAlign: "right" }}>
+                      <Typography
+                        sx={{
+                          fontFamily: "inherit",
+                          fontSize: { xs: "14px", sm: "15px" },
+                          fontWeight: 800,
+                          color: "var(--primary-text)",
+                        }}
+                      >
+                        آفرین! سوال با موفقیت حل شد 🎉
+                      </Typography>
+                      {countdown !== null ? (
+                        <Typography
+                          sx={{
+                            fontFamily: "inherit",
+                            fontSize: { xs: "11px", sm: "12px" },
+                            color: "var(--secondary-text)",
+                            mt: 0.2,
+                          }}
+                        >
+                          انتقال خودکار به سوال بعدی در {toPersianDigits(countdown)} ثانیه...
+                        </Typography>
+                      ) : (
+                        <Typography
+                          sx={{
+                            fontFamily: "inherit",
+                            fontSize: { xs: "11px", sm: "12px" },
+                            color: "var(--secondary-text)",
+                            mt: 0.2,
+                          }}
+                        >
+                          انتقال خودکار لغو شد. هر زمان آماده بودید روی «سوال بعدی» کلیک کنید.
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+
+                  {countdown !== null && (
+                    <Button
+                      size="small"
+                      onClick={handleCancelCountdown}
+                      sx={{
+                        fontFamily: "inherit",
+                        fontSize: { xs: "12px", sm: "13px" },
+                        fontWeight: 800,
+                        color: "var(--primary-text)",
+                        bgcolor: "background.paper",
+                        border: "1px solid var(--border)",
+                        borderRadius: "10px",
+                        px: { xs: 1.8, sm: 2.2 },
+                        py: 0.4,
+                        minWidth: "auto",
+                        boxShadow: "none",
+                        "&:hover": {
+                          bgcolor: "rgba(0,0,0,0.06)",
+                        },
+                      }}
+                    >
+                      لغو
+                    </Button>
+                  )}
+                </Box>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Question Formula Card */}
+          <QuestionPromptCard
+            prefix="اگر داشته باشیم:"
+            latex={questionLatex}
+            description={stageDescription}
+            sx={{ mb: { xs: 2.5, sm: 3 } }}
+          />
+
+          {/* Central Instruction Text */}
+          <Typography
             sx={{
-              fontSize: "1rem",
-              p: 2.5,
-              borderRadius: "12px",
-              boxShadow: 4,
               fontFamily: "inherit",
-              lineHeight: 1.8,
+              fontSize: { xs: "15px", sm: "17px" },
+              fontWeight: 700,
+              color: "var(--primary-text)",
+              textAlign: "center",
+              mb: { xs: 2.5, sm: 3.5 },
             }}
           >
-            {alertMessage}
-          </Alert>
-        </Box>
-      </Backdrop>
+            آنگاه جواب کدام یک از گزینه‌های زیر است
+          </Typography>
 
-      {/* Main Gameplay / Completion Render */}
-      {isCompleted || isAllFinished ? (
-        <Grid size={{ xs: 12 }}>
-          <QuestionCompletionView
-            isAllFinished={isAllFinished}
-            topicTitle={topic?.title || topicSlug}
-            onNextQuestion={handleNextQuestion}
-            onRestart={handleRestart}
-            hasNext={currentIndex < questions.length - 1}
+          {/* Options Grid (2x2 on desktop, 1-col on mobile) */}
+          <QuestionOptionsGrid
+            options={optionTitles}
+            selectedOption={selectedOption}
+            onSelectOption={setSelectedOption}
+            disabled={isSubmitting}
+            sx={{ mb: { xs: 2.5, sm: 3 } }}
           />
-        </Grid>
-      ) : (
-        <>
-          {/* Question & Stage Info */}
-          <Grid size={{ xs: 12 }} sx={{ position: "relative", minHeight: "130px" }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 1.5,
-              }}
-            >
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "var(--secondary-text)",
-                  fontWeight: 600,
-                }}
-              >
-                {STAGE_TITLES[(stageNumber - 1) % STAGE_TITLES.length]}
-              </Typography>
-              <Typography
-                variant="caption"
-                sx={{
-                  bgcolor: "rgba(70, 43, 239, 0.08)",
-                  color: "var(--activeBG)",
-                  px: 1.5,
-                  py: 0.5,
-                  borderRadius: "6px",
-                  fontWeight: 700,
-                  fontSize: "12px",
-                }}
-              >
-                مرحله: {stageNumber}
-              </Typography>
-            </Box>
 
-            <Typography
-              variant="h5"
-              component="div"
-              sx={{
-                direction: "ltr",
-                textAlign: "center",
-                my: 2,
-                "& *": { direction: "inherit" },
-              }}
-            >
-              {questionLatex && <BlockMath math={questionLatex} />}
-              {description && <MixedContent content={description} />}
-            </Typography>
-          </Grid>
+          {/* Bottom Action Bar */}
+          <QuestionActionBar
+            onNextStep={handleNextStep}
+            onNextQuestion={handleNextQuestion}
+            isNextStepDisabled={selectedOption === null}
+            isNextQuestionDisabled={!isCurrentQuestionDone && selectedOption === null}
+            hasNextQuestion={currentIndex < questions.length - 1}
+            isLoading={isSubmitting}
+          />
+        </Box>
+      </Box>
 
-          {error && (
-            <Grid size={{ xs: 12 }}>
-              <Typography variant="body2" color="error" textAlign="center">
-                {error}
-              </Typography>
-            </Grid>
-          )}
-
-          {/* 4 Interactive Options */}
-          <Grid size={{ xs: 12 }}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {optionTitles.map((latex, index) => (
-                <QuestionOptions
-                  key={index + 1}
-                  option={index + 1}
-                  latex={latex}
-                  handleSubmit={handleSubmit}
-                />
-              ))}
-            </Box>
-          </Grid>
-        </>
-      )}
-    </Grid>
+      {/* Incorrect Answer Explanation Modal */}
+      <QuestionExplanationModal
+        open={showExplanationModal}
+        onClose={() => setShowExplanationModal(false)}
+        message={explanationMessage}
+      />
+    </Box>
   );
 }

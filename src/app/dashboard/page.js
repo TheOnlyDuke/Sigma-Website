@@ -3,23 +3,22 @@ import { useState, useEffect, useCallback } from "react";
 import { Box, CircularProgress, Alert, Button, Typography } from "@mui/material";
 import DashSidebar from "@/components/Dashboard/DashSidebar";
 import DashTabNavigation from "@/components/Dashboard/DashTabNavigation";
-import DashStatsTab from "@/components/Dashboard/DashStatsTab";
 import DashTopicsTab from "@/components/Dashboard/DashTopicsTab";
 import DashNotificationsTab from "@/components/Dashboard/DashNotificationsTab";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
 const HASH_TO_TAB = {
-  stats: 0,
-  topics: 1,
-  notifs: 2,
-  notifications: 2,
+  topics: 0,
+  mobahes: 0,
+  stats: 0, // Backward-compatible redirect to primary topics tab
+  notifs: 1,
+  notifications: 1,
 };
 
 const TAB_TO_HASH = {
-  0: "stats",
-  1: "topics",
-  2: "notifs",
+  0: "topics",
+  1: "notifs",
 };
 
 const LogoutSvg = ({ color = "#FFFFFF" }) => (
@@ -44,7 +43,7 @@ export default function Dashboard() {
       const hash = window.location.hash.replace(/^#/, "").split("?")[0].toLowerCase();
       if (hash && HASH_TO_TAB[hash] !== undefined) {
         setActiveTab(HASH_TO_TAB[hash]);
-      } else if (!hash) {
+      } else {
         setActiveTab(0);
       }
     };
@@ -62,7 +61,7 @@ export default function Dashboard() {
 
   const handleTabChange = useCallback((newIndex) => {
     setActiveTab(newIndex);
-    const targetHash = TAB_TO_HASH[newIndex] || "stats";
+    const targetHash = TAB_TO_HASH[newIndex] || "topics";
     if (window.location.hash !== `#${targetHash}`) {
       window.history.pushState(null, "", `#${targetHash}`);
     }
@@ -101,13 +100,11 @@ export default function Dashboard() {
   const renderTabContent = () => {
     switch (activeTab) {
       case 0:
-        return <DashStatsTab />;
-      case 1:
         return <DashTopicsTab />;
-      case 2:
+      case 1:
         return <DashNotificationsTab />;
       default:
-        return <DashStatsTab />;
+        return <DashTopicsTab />;
     }
   };
 

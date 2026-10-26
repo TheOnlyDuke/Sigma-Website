@@ -2,25 +2,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { dashboardNavItems } from "@/utils/dummydatas";
 
-const AmarIcon = ({ color }) => (
-  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-    <path
-      d="M9.625 5.5C8.26526 5.5 6.93605 5.90321 5.80546 6.65865C4.67487 7.41408 3.79368 8.48781 3.27333 9.74405C2.75298 11.0003 2.61683 12.3826 2.8821 13.7162C3.14738 15.0499 3.80216 16.2749 4.76364 17.2364C5.72513 18.1978 6.95014 18.8526 8.28376 19.1179C9.61738 19.3832 10.9997 19.247 12.256 18.7267C13.5122 18.2063 14.5859 17.3251 15.3414 16.1945C16.0968 15.064 16.5 13.7347 16.5 12.375H9.625V5.5Z"
-      stroke={color}
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M12.375 9.625H19.25C19.25 7.80164 18.5257 6.05295 17.2364 4.76364C15.947 3.47433 14.1984 2.75 12.375 2.75V9.625Z"
-      stroke={color}
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 const BookIcon = ({ color }) => (
   <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
     <path
@@ -46,7 +27,6 @@ const NotifIcon = ({ color }) => (
 );
 
 const iconMap = {
-  Amar: AmarIcon,
   Mobahes: BookIcon,
   Notif: NotifIcon,
 };

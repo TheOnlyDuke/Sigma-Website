@@ -646,9 +646,8 @@ export const mockUserData = {
 };
 
 export const dashboardNavItems = [
-  { id: "stats", label: "آمار من", tabIndex: 0, icon: "Amar", hash: "stats" },
-  { id: "topics", label: "مباحث", tabIndex: 1, icon: "Mobahes", hash: "topics" },
-  { id: "notifications", label: "اطلاع رسانی", tabIndex: 2, icon: "Notif", hash: "notifs" },
+  { id: "topics", label: "مباحث", tabIndex: 0, icon: "Mobahes", hash: "topics" },
+  { id: "notifications", label: "اطلاع رسانی", tabIndex: 1, icon: "Notif", hash: "notifs" },
 ];
 
 export const statsTableHeaders = [
