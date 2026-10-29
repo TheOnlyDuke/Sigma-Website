@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/questions/:path*"],
+  matcher: ["/dashboard/:path*", "/questions/:path*", "/auth", "/auth/login"],
 };
 
 export function proxy(request) {
@@ -15,6 +15,11 @@ export function proxy(request) {
   // Production: Check for access token cookie
   const accessToken = request.cookies.get("access_token");
   const pathname = request.nextUrl.pathname;
+
+  // If already authenticated and accessing login or registration, redirect to dashboard
+  if (accessToken?.value && (pathname === "/auth" || pathname === "/auth/login")) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
 
   if (
     !accessToken?.value &&

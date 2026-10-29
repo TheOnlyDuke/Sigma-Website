@@ -1,13 +1,23 @@
-import ListedMenu from "@/components/mainPage/Introduction/ListedMenu";
-import { howToSteps } from "@/utils/dummydatas";
 import ResponsiveContainer from "@/components/ResponsiveContainer";
-import { Typography } from "@mui/material";
+import { HowToContainer } from "@/components/HowTo";
+import { howToSteps } from "@/utils/dummydatas";
+
+export const metadata = {
+  title: "آموزش نحوه استفاده | سیگما",
+  description:
+    "راهنمای جامع تعاملی استفاده از سامانه آموزشی سیگما، شرکت در چالش‌های مفهومی و دسترسی به ویدیوها و جزوات تخصصی ریاضی.",
+};
 
 export default function HowToPage() {
   return (
-    <ResponsiveContainer component="main" sx={{ my: "130px" }}>
-      <Typography variant="title">اموزش نحوه استفاده:</Typography>
-      <ListedMenu data={howToSteps} bit={true} />
+    <ResponsiveContainer
+      component="main"
+      sx={{
+        py: { xs: "60px", sm: "80px", md: "110px" },
+      }}
+    >
+      <HowToContainer steps={howToSteps} />
     </ResponsiveContainer>
   );
 }
+

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Typography, Autocomplete, TextField } from "@mui/material";
 import {
@@ -14,9 +14,17 @@ import {
 import { validatePassword } from "@/utils/validations";
 import { universities } from "@/utils/dummydatas";
 import { apiClient } from "@/utils/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Page() {
   const router = useRouter();
+  const { USER_INFO, isLoading: isAuthLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthLoading && USER_INFO) {
+      router.replace("/dashboard");
+    }
+  }, [isAuthLoading, USER_INFO, router]);
   const [formData, setFormData] = useState({
     username: "",
     email: "",

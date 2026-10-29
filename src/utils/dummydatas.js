@@ -225,43 +225,96 @@ export const IntroMenuDatas = [
   },
 ];
 
-import step1 from "../../public/images/temp/Rectangle 26.png";
-import step2 from "../../public/images/temp/Rectangle 27.png";
-import step3 from "../../public/images/temp/Rectangle 28.png";
-import step4 from "../../public/images/temp/Rectangle 32.png";
-import step5 from "../../public/images/temp/Rectangle 34.png";
-import step6 from "../../public/images/temp/Rectangle 33.png";
+import step1 from "../../public/images/howto/step1.png";
+import step2 from "../../public/images/howto/step2.png";
+import step3 from "../../public/images/howto/step3.png";
+import step4 from "../../public/images/howto/step4.png";
+import step5 from "../../public/images/howto/step5.png";
+import step6 from "../../public/images/howto/step6.png";
 
 export const howToSteps = [
   {
-    title: <>ورود به سامانه:</>,
-    desc: "ابتدا وارد سامانه شوید و با انتخاب بخش مربوط به مبحث مورد نظر (مثلاً مشتق)، وارد فضای آموزشی شوید.",
+    id: "step-1",
+    stepNumber: 1,
+    stepLabel: "گام اول",
+    shortTitle: "ورود به سامانه",
+    title: <>ورود به سامانه</>,
+    desc: "ابتدا وارد سامانه شوید و با انتخاب بخش مربوط به مبحث مورد نظر (مثلاً مشتق یا انتگرال)، وارد فضای آموزشی و یادگیری تعاملی شوید.",
     picture: step1,
+    accentColor: "#462BEF",
+    tags: ["حساب کاربری", "داشبورد اختصاصی"],
+    actionText: null,
+    actionLink: null,
   },
   {
-    title: <>شروع چالش:</>,
-    desc: "در هر چالش، یک صورت‌مسئله نمایش داده می‌شود. این صورت‌مسئله به‌گونه‌ای طراحی شده که کاربر را وارد یک زنجیره استدلالی کند.",
+    id: "step-2",
+    stepNumber: 2,
+    stepLabel: "گام دوم",
+    shortTitle: "شروع چالش",
+    title: <>شروع چالش</>,
+    desc: "در هر چالش، یک صورت‌مسئله تحلیلی نمایش داده می‌شود. این صورت‌مسئله به‌گونه‌ای طراحی شده که شما را گام‌به‌گام وارد یک زنجیره استدلالی و فکری کند.",
     picture: step2,
+    accentColor: "#0EA5E9",
+    tags: ["مسائل مرحله‌ای", "تحلیل مفهومی"],
+    actionText: "ایجاد حساب کاربری",
+    actionLink: "/auth",
+    isAuthAware: true,
   },
   {
-    title: <>انتخاب گزینه:</>,
-    desc: "برای هر مرحله، چهار گزینه نمایش داده می‌شود. شما باید با توجه به درک خود از مسئله، گزینه‌ای را که منجر به ادامه مسیر صحیح است، انتخاب کنید.",
+    id: "step-3",
+    stepNumber: 3,
+    stepLabel: "گام سوم",
+    shortTitle: "انتخاب گزینه",
+    title: <>انتخاب گزینه صحیح</>,
+    desc: "برای هر مرحله، چهار گزینه مفهومی نمایش داده می‌شود. شما باید با تکیه بر درک منطقی و استنتاج ریاضی، گزینه‌ای را که مسیر استدلال را به‌درستی ادامه می‌دهد انتخاب کنید.",
     picture: step3,
+    accentColor: "#F59E0B",
+    tags: ["۴ گزینه استدلالی", "پرهیز از حدس", "منطق ریاضی"],
+    actionText: null,
+    actionLink: null,
   },
   {
-    title: <>پیشروی مرحله‌ای: </>,
-    desc: "با انتخاب گزینه درست، وارد گام بعدی می‌شوید. اگر گزینه اشتباه را انتخاب کنید، توضیحاتی جهت راهنمایی و اصلاح درک ارائه می‌شود تا کاربر بتواند با مرور مجدد، مسیر درست را پیدا کند.",
+    id: "step-4",
+    stepNumber: 4,
+    stepLabel: "گام چهارم",
+    shortTitle: "پیشروی مرحله‌ای",
+    title: <>پیشروی مرحله‌ای و بازخورد</>,
+    desc: "با انتخاب گزینه درست، بلافاصله به گام بعدی راه می‌یابید. در صورت انتخاب نادرست، راهنمایی مفهومی و تشریحی ارائه می‌شود تا بتوانید با درک عمیق‌تر، مسیر را جبران کنید.",
     picture: step4,
+    accentColor: "#10B981",
+    tags: ["ارزیابی آنی", "تحلیل خطای مفهومی", "امکان جبران"],
+    actionText: "مشاهده جدول رتبه‌بندی",
+    actionLink: "/leaderboard",
   },
   {
-    title: <>پایان چالش:</>,
-    desc: "پس از طی چندین مرحله و انتخاب‌های صحیح، به پایان چالش خواهید رسید. در انتها، یک جمع‌بندی از مفاهیم آموزش‌داده‌شده نمایش داده می‌شود.",
+    id: "step-5",
+    stepNumber: 5,
+    stepLabel: "گام پنجم",
+    shortTitle: "پایان چالش",
+    title: <>پایان چالش و ثبت امتیاز</>,
+    desc: "پس از طی مراحل مختلف و انتخاب‌های صحیح، به مرحله پایانی چالش می‌رسید. در انتها، کارنامه عملکرد شامل زمان صرف‌شده، دقت پاسخ‌ها و امتیاز ثبت‌شده نمایش داده می‌شود.",
     picture: step5,
+    accentColor: "#8B5CF6",
+    tags: ["محاسبه دقت و زمان", "کسب امتیاز سیگما"],
+    actionText: "ورود به داشبورد من",
+    actionLink: "/dashboard",
   },
   {
-    title: <>دسترسی به منابع:</>,
-    desc: "در صورت نیاز به توضیح بیشتر یا مرور مفاهیم، می‌توانید از قسمت ویدئوهای آموزشی و جزوات استفاده کنید (در حال تکمیل و به‌روزرسانی).",
+    id: "step-6",
+    stepNumber: 6,
+    stepLabel: "گام ششم",
+    shortTitle: "دسترسی به منابع",
+    title: <>دسترسی به منابع و ویدیوها</>,
+    desc: "جهت تعمیق یادگیری و تسلط بیشتر، در هر زمان می‌توانید به ویدیوهای تدریس مباحث در آپارات و جزوات دست‌نویس اساتید دانشگاه دسترسی داشته باشید.",
     picture: step6,
+    accentColor: "#EC4899",
+    tags: [
+      "ویدیوهای آموزشی",
+      "جزوات اساتید برتر",
+      { label: "آرشیو فرمول‌ها", isComingSoon: true },
+    ],
+    actionText: "مشاهده ویدیوهای آموزشی",
+    actionLink: "/topics/integral",
   },
 ];
 

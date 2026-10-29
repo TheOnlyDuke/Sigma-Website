@@ -1,7 +1,7 @@
 "use client";
 
 import { TextField, Typography } from "@mui/material";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   SubmitButton,
   PhoneField,
@@ -14,7 +14,13 @@ import { apiClient } from "@/utils/api";
 
 function LoginPage() {
   const router = useRouter();
-  const { updateAuth } = useAuth();
+  const { updateAuth, USER_INFO, isLoading: isAuthLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthLoading && USER_INFO) {
+      router.replace("/dashboard");
+    }
+  }, [isAuthLoading, USER_INFO, router]);
   const [error, setError] = useState("");
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
   const [formData, setFormData] = useState({
