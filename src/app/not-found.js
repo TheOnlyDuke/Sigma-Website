@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { Button, Typography, Container } from "@mui/material";
 
+export const metadata = {
+  title: "صفحه مورد نظر یافت نشد (۴۰۴)",
+  description:
+    "صفحه‌ای که به دنبال آن بودید در سامانه سیگما یافت نشد یا ممکن است حذف شده باشد.",
+};
+
 const Custom404 = () => {
   return (
     <Container

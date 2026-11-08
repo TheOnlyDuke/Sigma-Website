@@ -1,5 +1,11 @@
 import ResponsiveContainer from "@/components/ResponsiveContainer";
 
+export const metadata = {
+  title: "داشبورد کاربری",
+  description:
+    "مشاهده وضعیت پیشرفت تحصیلی، سرفصل‌های فعال، تاریخچه حل سوالات و اعلانات کاربری در سامانه سیگما.",
+};
+
 export default function DashBoardLayout({ children }) {
   return (
     <ResponsiveContainer

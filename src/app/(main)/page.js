@@ -9,6 +9,14 @@ import {
 import ResponsiveContainer from "@/components/ResponsiveContainer";
 import { IntroMenuDatas } from "@/utils/dummydatas";
 
+export const metadata = {
+  title: {
+    absolute: "سیگما | پلتفرم یادگیری تعاملی ریاضی و علوم",
+  },
+  description:
+    "سیگما؛ سامانه تعاملی آموزش و حل چالش‌های مفهومی ریاضی، ویدیوهای تدریس مباحث دانشگاهی و بانک سوالات چندمرحله‌ای.",
+};
+
 export default function Home() {
   const mainPageStyles = {
     "::before": {

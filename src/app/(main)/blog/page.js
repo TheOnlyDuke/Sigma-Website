@@ -1,10 +1,15 @@
-"use client";
 import React from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { blogs } from "@/utils/dummydatas";
 import HeaderBlogsItem from "@/components/Header/HeaderBlogsGridItem";
 import RouteLandingLayout from "@/components/common/RouteLandingLayout";
+
+export const metadata = {
+  title: "بلاگ و مقالات آموزشی",
+  description:
+    "مجموعه مقالات آموزشی، راهنماهای گام‌به‌گام و جزوات درسی برای یادگیری عمیق و کاربردی مفاهیم ریاضی.",
+};
 
 export default function BlogLandingPage() {
   return (

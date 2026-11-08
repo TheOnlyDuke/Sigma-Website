@@ -3,7 +3,7 @@ import { HowToContainer } from "@/components/HowTo";
 import { howToSteps } from "@/utils/dummydatas";
 
 export const metadata = {
-  title: "آموزش نحوه استفاده | سیگما",
+  title: "آموزش نحوه استفاده",
   description:
     "راهنمای جامع تعاملی استفاده از سامانه آموزشی سیگما، شرکت در چالش‌های مفهومی و دسترسی به ویدیوها و جزوات تخصصی ریاضی.",
 };
@@ -20,4 +20,3 @@ export default function HowToPage() {
     </ResponsiveContainer>
   );
 }
-

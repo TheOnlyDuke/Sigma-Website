@@ -1,10 +1,15 @@
-"use client";
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import { subjects } from "@/utils/dummydatas";
 import CategoryPaper from "@/components/Header/HeaderCategoryPaper";
 import RouteLandingLayout from "@/components/common/RouteLandingLayout";
+
+export const metadata = {
+  title: "مباحث و ویدیوهای آموزشی",
+  description:
+    "فهرست جامع سرفصل‌ها و مباحث آموزشی ریاضیات دانشگاهی شامل ویدیوهای تدریس، جزوات اساتید برتر و تمرین‌های طبقه‌بندی شده.",
+};
 
 export default function TopicsLandingPage() {
   return (

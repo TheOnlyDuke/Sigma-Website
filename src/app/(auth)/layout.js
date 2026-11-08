@@ -2,6 +2,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Box, Container } from "@mui/material";
 
+export const metadata = {
+  title: "احراز هویت",
+  description: "ورود یا ثبت‌نام در سامانه آموزش تعاملی ریاضی و علوم سیگما.",
+};
+
 export default function AuthLayout({ children }) {
   return (
     <Box

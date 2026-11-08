@@ -6,7 +6,7 @@ import ResponsiveContainer from "@/components/ResponsiveContainer";
 import { staffData } from "@/utils/dummydatas";
 
 export const metadata = {
-  title: "درباره ما | سیگما",
+  title: "درباره ما",
   description:
     "با تیم توسعه‌دهندگان و طراحان بانک سوال سیگما آشنا شوید. تیمی متشکل از دانشجویان و متخصصان ریاضی که در مسیر ساخت آینده‌ای بهتر برای آموزش ریاضی تلاش می‌کنند.",
 };
