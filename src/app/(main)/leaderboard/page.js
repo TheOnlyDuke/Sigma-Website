@@ -25,7 +25,8 @@ export default function LeaderboardPage() {
     >
       <ResponsiveContainer
         sx={{
-          py: { xs: "60px", sm: "80px", md: "100px" },
+          pt: { xs: "150px", sm: "200px", md: "275px" },
+          pb: { xs: "60px", sm: "80px", md: "125px" },
           px: { xs: "20px", sm: "32px", md: "48px", lg: "64px" },
         }}
       >

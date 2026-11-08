@@ -40,7 +40,7 @@ export default function QuestionCompletionView({
         alignItems: "center",
         textAlign: "center",
         direction: "rtl",
-        py: { xs: 3, sm: 6 },
+        py: { xs: 3, sm: 5, md: 6 },
         px: { xs: 2, sm: 4 },
         boxSizing: "border-box",
       }}

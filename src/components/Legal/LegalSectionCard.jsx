@@ -20,7 +20,7 @@ export default function LegalSectionCard({ section }) {
       component="section"
       aria-labelledby={`${section.id}-heading`}
       sx={{
-        scrollMarginTop: { xs: "95px", md: "125px" },
+        scrollMarginTop: { xs: "105px", sm: "130px", md: "175px" },
         width: "100%",
         display: "flex",
         flexDirection: "column",

@@ -324,9 +324,13 @@ export default function QuestionGameView({ topic }) {
           flex: 1,
           width: "100%",
           maxWidth: "1280px",
-          margin: { xs: "110px auto 40px auto", md: "140px auto 50px auto" },
+          margin: { xs: "155px auto 40px auto", md: "155px auto 100px auto" },
           px: { xs: 2, sm: 3 },
           boxSizing: "border-box",
+          minHeight: { md: "730px" },
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
         <QuestionCompletionView
@@ -350,7 +354,7 @@ export default function QuestionGameView({ topic }) {
         flex: 1,
         width: "100%",
         maxWidth: "1280px",
-        margin: { xs: "105px auto 40px auto", md: "140px auto 50px auto" },
+        margin: { xs: "155px auto 40px auto", md: "155px auto 100px auto" },
         px: { xs: 2, sm: 3 },
         boxSizing: "border-box",
       }}

@@ -13,7 +13,8 @@ export default function HowToPage() {
     <ResponsiveContainer
       component="main"
       sx={{
-        py: { xs: "60px", sm: "80px", md: "110px" },
+        pt: { xs: "150px", sm: "200px", md: "275px" },
+        pb: { xs: "60px", sm: "80px", md: "125px" },
       }}
     >
       <HowToContainer steps={howToSteps} />

@@ -20,41 +20,6 @@ export default function HowToHero({ steps = [], activeStep = 0, onSelectStep }) 
         mb: { xs: "50px", sm: "70px", md: "90px" },
       }}
     >
-      {/* Decorative Pill Badge */}
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
-        <Box
-          sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "10px",
-            px: "18px",
-            py: "8px",
-            borderRadius: "999px",
-            background: "rgba(70, 43, 239, 0.08)",
-            border: "1px solid rgba(70, 43, 239, 0.18)",
-            color: "var(--activeBG)",
-            fontSize: "14px",
-            fontWeight: 700,
-            mb: "20px",
-          }}
-        >
-          <Box
-            sx={{
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-              backgroundColor: "var(--activeBG)",
-              boxShadow: "0 0 10px var(--activeBG)",
-            }}
-          />
-          <span>راهنمای جامع تعاملی سیگما</span>
-        </Box>
-      </motion.div>
-
       {/* Main Page Title */}
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}

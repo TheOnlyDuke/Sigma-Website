@@ -30,7 +30,8 @@ export default function PrivacyRulesPage() {
         sx={{
           position: "relative",
           zIndex: 1,
-          py: { xs: "50px", sm: "70px", md: "100px" },
+          pt: { xs: "150px", sm: "200px", md: "275px" },
+          pb: { xs: "60px", sm: "80px", md: "125px" },
         }}
       >
         <LegalContainer sections={legalSections} />
