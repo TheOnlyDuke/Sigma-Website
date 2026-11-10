@@ -5,6 +5,5 @@ export { default as LegalSectionCard } from "./LegalSectionCard";
 export { default as LegalArticle } from "./LegalArticle";
 export { default as LegalBlueprintPlate } from "./LegalBlueprintPlate";
 export { default as LegalFooterNotice } from "./LegalFooterNotice";
-export { default as LegalBackgroundDecor } from "./LegalBackgroundDecor";
 
 

@@ -1,0 +1,87 @@
+.page-background-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+  z-index: 0;
+  contain: strict;
+}
+
+.bg-grid-layer {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--bg-grid-primary, rgba(70, 43, 239, 0.028)) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--bg-grid-primary, rgba(70, 43, 239, 0.028)) 1px, transparent 1px),
+    linear-gradient(to right, var(--bg-grid-secondary, rgba(15, 23, 42, 0.012)) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--bg-grid-secondary, rgba(15, 23, 42, 0.012)) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+
+.bg-rail-left {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-left: 1px dashed var(--bg-stroke-faint, rgba(15, 23, 42, 0.035));
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--bg-stroke, rgba(70, 43, 239, 0.07)) 0px,
+    var(--bg-stroke, rgba(70, 43, 239, 0.07)) 8px,
+    transparent 8px,
+    transparent 80px
+  );
+  opacity: 0.85;
+}
+
+.bg-rail-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-right: 1px dashed var(--bg-stroke-faint, rgba(15, 23, 42, 0.035));
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--bg-stroke, rgba(70, 43, 239, 0.07)) 0px,
+    var(--bg-stroke, rgba(70, 43, 239, 0.07)) 8px,
+    transparent 8px,
+    transparent 80px
+  );
+  opacity: 0.85;
+}
+
+.bg-watermark-glyph {
+  position: absolute;
+  user-select: none;
+  line-height: 1;
+  filter: blur(0.5px);
+  pointer-events: none;
+}
+
+@keyframes bgAmbientDrift {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.bg-subtle-drift {
+  animation: bgAmbientDrift 24s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-subtle-drift {
+    animation: none !important;
+  }
+}

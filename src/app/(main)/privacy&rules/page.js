@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import ResponsiveContainer from "@/components/ResponsiveContainer";
 import { LegalContainer } from "@/components/Legal";
 import { legalSections } from "@/utils/legalData";
-import { PageBackground } from "@/components/common/PageBackground";
+import { PageBackground } from "@/components/backgrounds/PageBackground";
 
 export const metadata = {
   title: "قوانین و حریم خصوصی",
@@ -22,10 +22,8 @@ export default function PrivacyRulesPage() {
         isolation: "isolate",
       }}
     >
-      {/* Full-bleed thematic page background extending across entire viewport width */}
-      <PageBackground preset="legal" />
+      <PageBackground variant="legal" />
 
-      {/* Centered Content Container */}
       <ResponsiveContainer
         sx={{
           position: "relative",
