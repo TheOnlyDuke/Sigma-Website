@@ -232,6 +232,66 @@ export function MathDiagramFragmentSvg({ strokeColor, textColor, sx }) {
   );
 }
 
+export function ProcessFlowSvg({ strokeColor, textColor, sx }) {
+  return (
+    <Box
+      component="svg"
+      viewBox="0 0 150 70"
+      sx={{
+        width: "100%",
+        height: "100%",
+        opacity: 0.75,
+        ...sx,
+      }}
+    >
+      <rect x="5" y="8" width="140" height="54" rx="4" fill="none" stroke={strokeColor} strokeWidth="0.8" strokeDasharray="3 2" />
+      <circle cx="28" cy="35" r="10" fill="none" stroke={strokeColor} strokeWidth="1" />
+      <text x="28" y="38" textAnchor="middle" fill={textColor} fontSize="7" fontFamily="monospace" fontWeight="bold">01</text>
+      <line x1="38" y1="35" x2="65" y2="35" stroke={strokeColor} strokeWidth="0.8" strokeDasharray="2 2" />
+      <polygon points="65,35 60,32 60,38" fill={strokeColor} />
+      <circle cx="75" cy="35" r="10" fill="none" stroke={strokeColor} strokeWidth="1" />
+      <text x="75" y="38" textAnchor="middle" fill={textColor} fontSize="7" fontFamily="monospace" fontWeight="bold">02</text>
+      <line x1="85" y1="35" x2="112" y2="35" stroke={strokeColor} strokeWidth="0.8" strokeDasharray="2 2" />
+      <polygon points="112,35 107,32 107,38" fill={strokeColor} />
+      <circle cx="122" cy="35" r="10" fill="none" stroke={strokeColor} strokeWidth="1" />
+      <text x="122" y="38" textAnchor="middle" fill={textColor} fontSize="7" fontFamily="monospace" fontWeight="bold">03</text>
+      <text x="75" y="56" textAnchor="middle" fill={textColor} fontSize="5.5" fontFamily="monospace" letterSpacing="0.08em">
+        PEDAGOGICAL FLOW // STEP-SEQUENCE
+      </text>
+    </Box>
+  );
+}
+
+export function MetricGraphSvg({ strokeColor, textColor, sx }) {
+  return (
+    <Box
+      component="svg"
+      viewBox="0 0 140 90"
+      sx={{
+        width: "100%",
+        height: "100%",
+        opacity: 0.7,
+        ...sx,
+      }}
+    >
+      <line x1="18" y1="12" x2="18" y2="78" stroke={strokeColor} strokeWidth="0.8" />
+      <line x1="14" y1="74" x2="130" y2="74" stroke={strokeColor} strokeWidth="0.8" />
+      <polygon points="18,8 15,14 21,14" fill={strokeColor} />
+      <polygon points="134,74 128,71 128,77" fill={strokeColor} />
+      <rect x="30" y="44" width="16" height="30" fill="none" stroke={strokeColor} strokeWidth="0.8" />
+      <rect x="56" y="28" width="16" height="46" fill="none" stroke={strokeColor} strokeWidth="1" />
+      <rect x="82" y="52" width="16" height="22" fill="none" stroke={strokeColor} strokeWidth="0.8" />
+      <line x1="18" y1="28" x2="120" y2="28" stroke={strokeColor} strokeWidth="0.6" strokeDasharray="2 2" />
+      <text x="38" y="40" textAnchor="middle" fill={textColor} fontSize="6" fontFamily="monospace">#02</text>
+      <text x="64" y="24" textAnchor="middle" fill={textColor} fontSize="6.5" fontFamily="monospace" fontWeight="bold">#01</text>
+      <text x="90" y="48" textAnchor="middle" fill={textColor} fontSize="6" fontFamily="monospace">#03</text>
+      <text x="75" y="84" textAnchor="middle" fill={textColor} fontSize="5.5" fontFamily="monospace" letterSpacing="0.08em">
+        PERCENTILE DISTRIBUTION // 1404
+      </text>
+    </Box>
+  );
+}
+
 export function renderBackgroundFigure(figure, tokens) {
   if (!figure) return null;
 
@@ -282,6 +342,22 @@ export function renderBackgroundFigure(figure, tokens) {
     case "mathDiagram":
       return (
         <MathDiagramFragmentSvg
+          strokeColor={tokens.stroke}
+          textColor={tokens.text}
+        />
+      );
+
+    case "processFlow":
+      return (
+        <ProcessFlowSvg
+          strokeColor={tokens.stroke}
+          textColor={tokens.text}
+        />
+      );
+
+    case "metricGraph":
+      return (
+        <MetricGraphSvg
           strokeColor={tokens.stroke}
           textColor={tokens.text}
         />

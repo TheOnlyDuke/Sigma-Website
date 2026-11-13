@@ -1,6 +1,8 @@
+import { Box } from "@mui/material";
 import ResponsiveContainer from "@/components/ResponsiveContainer";
 import { HowToContainer } from "@/components/HowTo";
 import { howToSteps } from "@/utils/dummydatas";
+import { PageBackground } from "@/components/backgrounds/PageBackground";
 
 export const metadata = {
   title: "آموزش نحوه استفاده",
@@ -10,14 +12,28 @@ export const metadata = {
 
 export default function HowToPage() {
   return (
-    <ResponsiveContainer
+    <Box
       component="main"
       sx={{
-        pt: { xs: "150px", sm: "200px", md: "275px" },
-        pb: { xs: "60px", sm: "80px", md: "125px" },
+        position: "relative",
+        width: "100%",
+        minHeight: "100vh",
+        overflow: "hidden",
+        isolation: "isolate",
       }}
     >
-      <HowToContainer steps={howToSteps} />
-    </ResponsiveContainer>
+      <PageBackground variant="howto" />
+
+      <ResponsiveContainer
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          pt: { xs: "150px", sm: "200px", md: "275px" },
+          pb: { xs: "60px", sm: "80px", md: "125px" },
+        }}
+      >
+        <HowToContainer steps={howToSteps} />
+      </ResponsiveContainer>
+    </Box>
   );
 }

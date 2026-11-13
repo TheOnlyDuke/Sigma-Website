@@ -233,7 +233,7 @@ export const legalSections = [
           },
           /*
            * Clause 6.3 (ترجیحات کاربری و داده‌های فنی نشست) has been removed from the user-facing legal page
-           * and relocated to CLAUDE.md under Section 6 with an actionable maintenance trigger rule.
+           * and relocated to AGENTS.md under Section 8 with an actionable maintenance trigger rule.
            *
            * Preserved technical context:
            * {

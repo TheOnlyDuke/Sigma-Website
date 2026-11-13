@@ -1,5 +1,7 @@
+import { Box } from "@mui/material";
 import { topicRouteValidator } from "@/lib/routeValidation";
 import TopicDetailView from "@/components/Topics/TopicDetailView";
+import { PageBackground } from "@/components/backgrounds/PageBackground";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -25,5 +27,18 @@ export default async function TopicDetailPage({ params }) {
   const { slug } = await params;
   const topic = topicRouteValidator.validateOrNotFound(slug);
 
-  return <TopicDetailView topic={topic} />;
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        minHeight: "100vh",
+        overflow: "hidden",
+        isolation: "isolate",
+      }}
+    >
+      <PageBackground variant="learning" />
+      <TopicDetailView topic={topic} />
+    </Box>
+  );
 }

@@ -6,6 +6,8 @@ import { resolvePreset } from "./background-presets";
 import BackgroundGrid from "./BackgroundGrid";
 import BackgroundWatermarks from "./BackgroundWatermarks";
 import BackgroundFigures from "./BackgroundFigures";
+import BackgroundFormulas from "./BackgroundFormulas";
+import BackgroundMathSymbols from "./BackgroundMathSymbols";
 import BackgroundStations from "./BackgroundStations";
 import "./background.css";
 
@@ -52,6 +54,18 @@ export default function PageBackground({
 
       <BackgroundFigures
         figures={config.editorialFigures}
+        tokens={tokens}
+        motionClass={motionClass}
+      />
+
+      <BackgroundFormulas
+        formulas={config.formulas}
+        tokens={tokens}
+        motionClass={motionClass}
+      />
+
+      <BackgroundMathSymbols
+        symbols={config.mathSymbols}
         tokens={tokens}
         motionClass={motionClass}
       />
